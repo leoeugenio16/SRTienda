@@ -1,0 +1,40 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Persona {
+  id               String   @id @default(cuid())
+  dni_persona      String   @unique
+  nombre_persona   String
+  apellido_persona String
+  telefono         String
+  edad_persona     Int
+  es_encargada     Boolean
+  reingreso_persona Int
+  habitacion       Habitacion @relation(fields: [habitacionId], references: [id])
+  habitacionId     String
+  reservas          Reserva[] @relation("ReservaToPersona")
+  reservasAcompanante Reserva[] @relation("ReservaToAcompanante")
+}
+
+model Habitacion {
+  id         String   @id @default(cuid())
+  personas   Persona[]
+  reservas   Reserva[] @relation("ReservaToHabitacion")
+}
+
+model Reserva {
+  id                  String   @id @default(cuid())
+  fecha_de_entrada    DateTime
+  fecha_de_salida     DateTime
+  habitacion          Habitacion @relation("ReservaToHabitacion", fields: [habitacionId], references: [id])
+  habitacionId        String
+  persona_encargada   Persona   @relation("ReservaToPersona", fields: [personaEncargadaId], references: [id])
+  personaEncargadaId  String
+  acompanantes        Persona[] @relation("ReservaToAcompanante")
+}

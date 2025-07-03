@@ -1,0 +1,17 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contrasenas",
+  "info": {
+    "singularName": "contrasena",
+    "pluralName": "contrasenas",
+    "displayName": "contrasena"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "contrasena_acceso": {
+      "type": "string"
+    }
+  }
+}
