@@ -1,25 +1,17 @@
-// src/app/page.js
 import Link from "next/link";
 
-const productosDestacados = [
-  {
-    id: 1,
-    nombre: "Camiseta Oficial",
-    imagen: "/camiseta.jpg",
-    precio: 29900,
-    slug: "camiseta-oficial",
-  },
-  {
-    id: 2,
-    nombre: "Buzo Urbano",
-    imagen: "/buzo.jpg",
-    precio: 34900,
-    slug: "buzo-urbano",
-  },
-  // Agregá más desde el CMS después
-];
+async function getDestacados() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[highlight][$eq]=true&populate=images`,
+    { cache: "no-store" }
+  );
+  const data = await res.json();
+  return data.data;
+}
 
-export default function Home() {
+export default async function Home() {
+  const productosDestacados = await getDestacados();
+
   return (
     <main className="bg-white text-gray-900">
       {/* HERO */}
@@ -55,22 +47,30 @@ export default function Home() {
       <section className="p-4">
         <h2 className="text-2xl font-semibold mb-4 text-center">Productos Destacados</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {productosDestacados.map((prod) => (
-            <Link href={`/productos/${prod.slug}`} key={prod.id}>
-              <div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition">
-                <img src={prod.imagen} alt={prod.nombre} className="w-full h-60 object-cover" />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{prod.nombre}</h3>
-                  <p className="text-sm text-gray-600">${prod.precio.toLocaleString()}</p>
-                  <button className="mt-2 w-full bg-black text-white py-2 rounded hover:bg-gray-800">
-                    Ver más
-                  </button>
+          {productosDestacados.map((prod) => {
+            const { id, title, slug, price_sale, images } = prod;
+            const imageUrl = images?.[0]?.url
+              ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${images[0].url}`
+              : "/placeholder.jpg";
+
+            return (
+              <Link href={`/productos/${slug}`} key={id}>
+                <div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition">
+                  <img src={imageUrl} alt={title} className="w-full h-60 object-cover" />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold">{title}</h3>
+                    <p className="text-sm text-gray-600">${price_sale.toLocaleString()}</p>
+                    <button className="mt-2 w-full bg-black text-white py-2 rounded hover:bg-gray-800">
+                      Ver más
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </section>
     </main>
   );
 }
+
