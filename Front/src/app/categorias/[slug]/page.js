@@ -29,7 +29,7 @@ export default function CategoriaPage({ params }) {
     const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
     const nuevoProducto = {
-      documentId: producto.documentId || producto.id,
+      documentId: producto.documentId,
       nombre: producto.title,
       precio: producto.price_sale,
       slug: producto.slug,
