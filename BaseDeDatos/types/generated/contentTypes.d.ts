@@ -525,6 +525,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
       'api::product.product'
     > &
       Schema.Attribute.Private;
+    permitirSugerirPrecio: Schema.Attribute.Boolean;
     price_provider: Schema.Attribute.Decimal;
     price_sale: Schema.Attribute.Decimal;
     provider: Schema.Attribute.Relation<'oneToOne', 'api::provider.provider'>;

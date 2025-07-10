@@ -54,6 +54,9 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::provider.provider"
+    },
+    "permitirSugerirPrecio": {
+      "type": "boolean"
     }
   }
 }
