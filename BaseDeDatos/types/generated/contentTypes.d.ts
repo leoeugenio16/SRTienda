@@ -528,7 +528,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     permitirSugerirPrecio: Schema.Attribute.Boolean;
     price_provider: Schema.Attribute.Decimal;
     price_sale: Schema.Attribute.Decimal;
-    provider: Schema.Attribute.Relation<'oneToOne', 'api::provider.provider'>;
+    providers: Schema.Attribute.Relation<'manyToOne', 'api::provider.provider'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'>;
     stock_virtual: Schema.Attribute.Integer;
@@ -542,6 +542,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
 export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
   collectionName: 'providers';
   info: {
+    description: '';
     displayName: 'provider';
     pluralName: 'providers';
     singularName: 'provider';
@@ -553,6 +554,10 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    image: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
     instagram: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -561,7 +566,10 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    sobreNosotros: Schema.Attribute.Text;
     terms: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &

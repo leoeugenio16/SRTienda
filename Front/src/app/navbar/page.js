@@ -94,6 +94,7 @@ export default function Navbar() {
             <Link href="/" className="text-black">Inicio</Link>
             <Link href="/productos" className="text-black">Productos</Link>
             <Link href="/categorias" className="text-black">Categorías</Link>
+            <Link href="/vendedores" className="text-black">Vendedores</Link>
             <Link href="/carrito" className="flex items-center gap-1 text-black">
               <ShoppingCart className="w-4 h-4" />
               Carrito
@@ -127,6 +128,7 @@ export default function Navbar() {
             <Link href="/" className="block py-2 text-black">Inicio</Link>
             <Link href="/productos" className="block py-2 text-black">Productos</Link>
             <Link href="/categorias" className="block py-2 text-black">Categorías</Link>
+            <Link href="/vendedores" className="block py-2 text-black">Vendedores</Link>
             <Link href="/carrito" className="block py-2 flex items-center gap-1 text-black">
               <ShoppingCart className="w-4 h-4" />
               Carrito

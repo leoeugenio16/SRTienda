@@ -4,7 +4,8 @@
   "info": {
     "singularName": "provider",
     "pluralName": "providers",
-    "displayName": "provider"
+    "displayName": "provider",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -21,6 +22,31 @@
     },
     "terms": {
       "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "sobreNosotros": {
+      "type": "text"
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "providers"
+    },
+    "image": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
     }
   }
 }

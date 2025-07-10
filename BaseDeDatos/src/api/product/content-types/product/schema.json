@@ -50,13 +50,14 @@
       "target": "api::category.category",
       "inversedBy": "products"
     },
-    "provider": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::provider.provider"
-    },
     "permitirSugerirPrecio": {
       "type": "boolean"
+    },
+    "providers": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::provider.provider",
+      "inversedBy": "products"
     }
   }
 }
