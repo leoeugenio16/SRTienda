@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Home, Boxes, FolderOpen } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,35 +31,44 @@ export default function Navbar() {
 
   // Obtener banners
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/banners?filters[active][$eq]=true&sort=order:asc&populate[desktopImage][fields][0]=url&populate[mobileImage][fields][0]=url`)
+    fetch(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/banners?filters[active][$eq]=true&sort=order:asc&populate[desktopImage][fields][0]=url&populate[mobileImage][fields][0]=url`
+    )
       .then((res) => res.json())
       .then((data) => {
-        console.log("Respuesta de la API de banners:", JSON.stringify(data, null, 2));
+        console.log(
+          "Respuesta de la API de banners:",
+          JSON.stringify(data, null, 2)
+        );
         if (data.data && Array.isArray(data.data)) {
-          const parsed = data.data.map((item) => {
-            console.log("Procesando banner:", item);
-            const desktop = item.desktopImage?.url
-              ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.desktopImage.url}`
-              : null;
-            const mobile = item.mobileImage?.[0]?.url
-              ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.mobileImage[0].url}`
-              : null;
+          const parsed = data.data
+            .map((item) => {
+              console.log("Procesando banner:", item);
+              const desktop = item.desktopImage?.url
+                ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.desktopImage.url}`
+                : null;
+              const mobile = item.mobileImage?.[0]?.url
+                ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.mobileImage[0].url}`
+                : null;
 
-            console.log("URLs generadas:", { desktop, mobile });
+              console.log("URLs generadas:", { desktop, mobile });
 
-            return {
-              id: item.id || null,
-              name: item.name || "Banner sin nombre",
-              link: item.link || "#",
-              desktopImage: desktop,
-              mobileImage: mobile,
-            };
-          }).filter((banner) => banner.desktopImage || banner.mobileImage);
+              return {
+                id: item.id || null,
+                name: item.name || "Banner sin nombre",
+                link: item.link || "#",
+                desktopImage: desktop,
+                mobileImage: mobile,
+              };
+            })
+            .filter((banner) => banner.desktopImage || banner.mobileImage);
 
           console.log("Banners procesados:", parsed);
           setBanners(parsed);
         } else {
-          console.warn("No se encontraron datos válidos en la respuesta de la API de banners");
+          console.warn(
+            "No se encontraron datos válidos en la respuesta de la API de banners"
+          );
           setBanners([]);
         }
       })
@@ -85,94 +95,199 @@ export default function Navbar() {
   };
 
   return (
-    <>
-      <header className="bg-white shadow-md fixed w-full z-50 top-0 left-0" style={{ height: 64 }}>
-        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center" style={{ height: 64 }}>
-          <Link href="/" className="text-lg font-bold text-black">SRTienda</Link>
-  
-          <nav className="hidden md:flex gap-6 items-center text-sm font-medium text-black">
-            <Link href="/" className="text-black">Inicio</Link>
-            <Link href="/productos" className="text-black">Productos</Link>
-            <Link href="/categorias" className="text-black">Categorías</Link>
-            <Link href="/vendedores" className="text-black">Vendedores</Link>
-            <Link href="/carrito" className="flex items-center gap-1 text-black">
-              <ShoppingCart className="w-4 h-4" />
-              Carrito
-            </Link>
-            {/* {usuario ? (
-              <>
-                <span className="text-black">Hola, {usuario.username}</span>
-                <button onClick={cerrarSesion} className="text-red-500 text-sm hover:underline">
-                  Cerrar sesión
-                </button>
-              </>
-            ) : (
-              <>
-                <Link href="/login" className="text-black hover:underline">Iniciar sesión</Link>
-                <Link href="/registro" className="text-black hover:underline">Registrarse</Link>
-              </>
-            )} */}
-          </nav>
-  
-          <button className="md:hidden focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
-            <div className="space-y-1">
-              <span className="block w-5 h-0.5 bg-black" />
-              <span className="block w-5 h-0.5 bg-black" />
-              <span className="block w-5 h-0.5 bg-black" />
-            </div>
-          </button>
-        </div>
-  
-        {menuOpen && (
-          <div className="md:hidden bg-white px-4 pb-4 shadow-md">
-            <Link href="/" className="block py-2 text-black">Inicio</Link>
-            <Link href="/productos" className="block py-2 text-black">Productos</Link>
-            <Link href="/categorias" className="block py-2 text-black">Categorías</Link>
-            <Link href="/vendedores" className="block py-2 text-black">Vendedores</Link>
-            <Link href="/carrito" className="block py-2 flex items-center gap-1 text-black">
-              <ShoppingCart className="w-4 h-4" />
-              Carrito
-            </Link>
-            {/* {usuario ? (
-              <>
-                <p className="py-2 text-black">Hola, {usuario.username}</p>
-                <button onClick={cerrarSesion} className="text-red-500 py-2 text-sm hover:underline">
-                  Cerrar sesión
-                </button>
-              </>
-            ) : (
-              <>
-                <Link href="/login" className="block py-2 text-black hover:underline">Iniciar sesión</Link>
-                <Link href="/registro" className="block py-2 text-black hover:underline">Registrarse</Link>
-              </>
-            )} */}
+  <>
+    <header
+      className="bg-white shadow-md fixed w-full z-50 top-0 left-0"
+      style={{ height: 64 }}
+    >
+      <div
+        className="max-w-7xl mx-auto px-6 flex justify-between items-center"
+        style={{ height: 64 }}
+      >
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/logo.png"
+            alt="Logo SRTienda"
+            height={100}
+            width={100}
+            priority
+          />
+        </Link>
+
+        {/* Menú escritorio */}
+        <nav className="hidden md:flex gap-8 items-center text-sm font-semibold text-orange-600">
+          <Link href="/" className="flex items-center gap-1 hover:text-orange-700 transition">
+            <Home className="w-5 h-5" />
+            Inicio
+          </Link>
+          <Link href="/productos" className="flex items-center gap-1 hover:text-orange-700 transition">
+            <Boxes className="w-5 h-5" />
+            Productos
+          </Link>
+          <Link href="/categorias" className="flex items-center gap-1 hover:text-orange-700 transition">
+            <FolderOpen className="w-5 h-5" />
+            Categorías
+          </Link>
+          <Link href="/carrito" className="flex items-center gap-1 hover:text-orange-700 transition">
+            <ShoppingCart className="w-5 h-5" />
+            Carrito
+          </Link>
+
+          {usuario ? (
+            <>
+              <span className="text-orange-700 font-medium">
+                Hola, {usuario.username}
+              </span>
+              <button
+                onClick={cerrarSesion}
+                className="text-red-600 text-sm hover:underline ml-2"
+                aria-label="Cerrar sesión"
+              >
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <Link href="/login" className="hover:text-orange-700 transition">
+                Iniciar sesión
+              </Link>
+              <Link href="/registro" className="hover:text-orange-700 transition">
+                Registrarse
+              </Link>
+            </>
+          )}
+        </nav>
+
+        {/* Botón hamburguesa para móvil */}
+        <button
+          className="md:hidden focus:outline-none"
+          aria-label="Toggle menu"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <div className="space-y-1">
+            <span
+              className={`block w-6 h-0.5 rounded bg-orange-600 transition-transform ${
+                menuOpen ? "rotate-45 translate-y-1.5" : ""
+              }`}
+            />
+            <span
+              className={`block w-6 h-0.5 rounded bg-orange-600 transition-opacity ${
+                menuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`block w-6 h-0.5 rounded bg-orange-600 transition-transform ${
+                menuOpen ? "-rotate-45 -translate-y-1.5" : ""
+              }`}
+            />
           </div>
-        )}
-      </header>
-  
-      {/* Banner debajo del navbar */}
-      <div className="w-full z-40 overflow-hidden" style={{ marginTop: 64, height: 192 }}>
-        {banners.length > 0 && (
-          <a
-            href={banners[bannerIndex].link || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full h-full"
-          >
-            {(isMobile ? banners[bannerIndex].mobileImage : banners[bannerIndex].desktopImage) && (
-              <img
-                src={isMobile ? banners[bannerIndex].mobileImage : banners[bannerIndex].desktopImage}
-                alt={banners[bannerIndex].name || "Banner"}
-                className="w-full h-full object-cover transition-opacity duration-1000"
-                key={banners[bannerIndex].id}
-                loading="lazy"
-              />
-            )}
-          </a>
-        )}
+        </button>
       </div>
-    </>
-  );
-  
-  
+
+      {/* Menú móvil */}
+      {menuOpen && (
+        <div className="md:hidden bg-white px-6 pb-6 shadow-md border-t border-orange-200">
+          <Link
+            href="/"
+            className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            onClick={() => setMenuOpen(false)}
+          >
+            <Home className="w-5 h-5" />
+            Inicio
+          </Link>
+          <Link
+            href="/productos"
+            className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            onClick={() => setMenuOpen(false)}
+          >
+            <Boxes className="w-5 h-5" />
+            Productos
+          </Link>
+          <Link
+            href="/categorias"
+            className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            onClick={() => setMenuOpen(false)}
+          >
+            <FolderOpen className="w-5 h-5" />
+            Categorías
+          </Link>
+          <Link
+            href="/carrito"
+            className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            onClick={() => setMenuOpen(false)}
+          >
+            <ShoppingCart className="w-5 h-5" />
+            Carrito
+          </Link>
+
+          {usuario ? (
+            <>
+              <p className="py-3 text-orange-600 font-medium">
+                Hola, {usuario.username}
+              </p>
+              <button
+                onClick={() => {
+                  cerrarSesion();
+                  setMenuOpen(false);
+                }}
+                className="text-red-600 py-2 text-sm hover:underline"
+              >
+                Cerrar sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="block py-3 text-orange-600 hover:text-orange-700 transition font-medium"
+                onClick={() => setMenuOpen(false)}
+              >
+                Iniciar sesión
+              </Link>
+              <Link
+                href="/registro"
+                className="block py-3 text-orange-600 hover:text-orange-700 transition font-medium"
+                onClick={() => setMenuOpen(false)}
+              >
+                Registrarse
+              </Link>
+            </>
+          )}
+        </div>
+      )}
+    </header>
+
+    {/* Banner debajo del navbar */}
+    <div
+      className="w-full z-40 overflow-hidden"
+      style={{ marginTop: 64, height: 192 }}
+    >
+      {banners && banners.length > 0 && (
+        <a
+          href={banners[bannerIndex]?.link || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block w-full h-full"
+        >
+          {(isMobile
+            ? banners[bannerIndex]?.mobileImage
+            : banners[bannerIndex]?.desktopImage) && (
+            <img
+              src={
+                isMobile
+                  ? banners[bannerIndex].mobileImage
+                  : banners[bannerIndex].desktopImage
+              }
+              alt={banners[bannerIndex]?.name || "Banner"}
+              className="w-full h-full object-cover transition-opacity duration-1000"
+              loading="lazy"
+            />
+          )}
+        </a>
+      )}
+    </div>
+  </>
+);
+
 }
