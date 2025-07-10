@@ -87,85 +87,63 @@ export default function Navbar() {
   return (
     <>
       <header className="bg-white shadow-md fixed w-full z-50 top-0 left-0" style={{ height: 64 }}>
-        <div
-          className="max-w-7xl mx-auto px-4 flex justify-between items-center"
-          style={{ height: 64 }}
-        >
-          <Link href="/" className="text-lg font-bold text-black">
-            SRTienda
-          </Link>
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center" style={{ height: 64 }}>
+          <Link href="/" className="text-lg font-bold text-black">SRTienda</Link>
   
-          <nav className="hidden md:flex gap-6 items-center text-sm font-medium text-gray-800">
-            <Link href="/">Inicio</Link>
-            <Link href="/productos">Productos</Link>
-            <Link href="/categorias">Categorías</Link>
-            <Link href="/carrito" className="flex items-center gap-1">
+          <nav className="hidden md:flex gap-6 items-center text-sm font-medium text-black">
+            <Link href="/" className="text-black">Inicio</Link>
+            <Link href="/productos" className="text-black">Productos</Link>
+            <Link href="/categorias" className="text-black">Categorías</Link>
+            <Link href="/carrito" className="flex items-center gap-1 text-black">
               <ShoppingCart className="w-4 h-4" />
               Carrito
             </Link>
-            {usuario ? (
+            {/* {usuario ? (
               <>
-                <span className="text-gray-700">Hola, {usuario.username}</span>
+                <span className="text-black">Hola, {usuario.username}</span>
                 <button onClick={cerrarSesion} className="text-red-500 text-sm hover:underline">
                   Cerrar sesión
                 </button>
               </>
             ) : (
               <>
-                <Link href="/login" className="text-blue-600 hover:underline">
-                  Iniciar sesión
-                </Link>
-                <Link href="/registro" className="text-blue-600 hover:underline">
-                  Registrarse
-                </Link>
+                <Link href="/login" className="text-black hover:underline">Iniciar sesión</Link>
+                <Link href="/registro" className="text-black hover:underline">Registrarse</Link>
               </>
-            )}
+            )} */}
           </nav>
   
           <button className="md:hidden focus:outline-none" onClick={() => setMenuOpen(!menuOpen)}>
             <div className="space-y-1">
-              <span className="block w-5 h-0.5 bg-black"></span>
-              <span className="block w-5 h-0.5 bg-black"></span>
-              <span className="block w-5 h-0.5 bg-black"></span>
+              <span className="block w-5 h-0.5 bg-black" />
+              <span className="block w-5 h-0.5 bg-black" />
+              <span className="block w-5 h-0.5 bg-black" />
             </div>
           </button>
         </div>
   
         {menuOpen && (
           <div className="md:hidden bg-white px-4 pb-4 shadow-md">
-            <Link href="/" className="block py-2">
-              Inicio
-            </Link>
-            <Link href="/productos" className="block py-2">
-              Productos
-            </Link>
-            <Link href="/categorias" className="block py-2">
-              Categorías
-            </Link>
-            <Link href="/carrito" className="block py-2 flex items-center gap-1">
+            <Link href="/" className="block py-2 text-black">Inicio</Link>
+            <Link href="/productos" className="block py-2 text-black">Productos</Link>
+            <Link href="/categorias" className="block py-2 text-black">Categorías</Link>
+            <Link href="/carrito" className="block py-2 flex items-center gap-1 text-black">
               <ShoppingCart className="w-4 h-4" />
               Carrito
             </Link>
-            {usuario ? (
+            {/* {usuario ? (
               <>
-                <p className="py-2 text-gray-700">Hola, {usuario.username}</p>
-                <button
-                  onClick={cerrarSesion}
-                  className="text-red-500 py-2 text-sm hover:underline"
-                >
+                <p className="py-2 text-black">Hola, {usuario.username}</p>
+                <button onClick={cerrarSesion} className="text-red-500 py-2 text-sm hover:underline">
                   Cerrar sesión
                 </button>
               </>
             ) : (
               <>
-                <Link href="/login" className="block py-2 text-blue-600 hover:underline">
-                  Iniciar sesión
-                </Link>
-                <Link href="/registro" className="block py-2 text-blue-600 hover:underline">
-                  Registrarse
-                </Link>
+                <Link href="/login" className="block py-2 text-black hover:underline">Iniciar sesión</Link>
+                <Link href="/registro" className="block py-2 text-black hover:underline">Registrarse</Link>
               </>
-            )}
+            )} */}
           </div>
         )}
       </header>
@@ -193,5 +171,6 @@ export default function Navbar() {
       </div>
     </>
   );
+  
   
 }
