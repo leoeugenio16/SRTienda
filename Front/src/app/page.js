@@ -13,7 +13,7 @@ export default async function Home() {
   const productosDestacados = await getDestacados();
 
   return (
-  <main className="bg-white text-gray-900">
+  <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
     {/* HERO */}
     <section className="w-full h-[60vh] bg-[url('/banner.jpg')] bg-cover bg-center flex items-center justify-center">
       <div className="bg-black/50 p-6 rounded-xl text-center text-white">
@@ -55,11 +55,13 @@ export default async function Home() {
 
           return (
             <Link href={`/productos/${slug}`} key={id}>
-              <div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition">
+              <div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition bg-white dark:bg-gray-800">
                 <img src={imageUrl} alt={title} className="w-full h-60 object-cover" />
                 <div className="p-4">
                   <h3 className="text-lg font-semibold">{title}</h3>
-                  <p className="text-sm text-gray-600">${price_sale.toLocaleString()}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    ${price_sale.toLocaleString()}
+                  </p>
                   <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition">
                     Ver más
                   </button>

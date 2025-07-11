@@ -58,14 +58,16 @@ export default function CategoriaPage({ params }) {
   };
 
   return (
-  <main className="bg-white text-gray-900 min-h-screen">
+  <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen">
     <section className="pt-20 p-6 max-w-6xl mx-auto text-center">
       <h1 className="text-4xl font-bold mb-6 capitalize text-orange-600">
         Categoría: {slug}
       </h1>
 
       {productos.length === 0 ? (
-        <p className="text-gray-500 text-lg">No hay productos en esta categoría.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-lg">
+          No hay productos en esta categoría.
+        </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {productos.map((prod) => {
@@ -77,7 +79,7 @@ export default function CategoriaPage({ params }) {
             return (
               <div
                 key={id}
-                className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col"
+                className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col bg-white dark:bg-gray-800"
               >
                 <a href={`/productos/${slug}`}>
                   <img
@@ -89,8 +91,10 @@ export default function CategoriaPage({ params }) {
 
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                      {title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
                       ${price_sale.toLocaleString()}
                     </p>
                   </div>
@@ -110,6 +114,7 @@ export default function CategoriaPage({ params }) {
     </section>
   </main>
 );
+
 
 
 }

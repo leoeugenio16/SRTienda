@@ -141,7 +141,7 @@ export default function ProductPage({ params }) {
   };
 
   return (
-  <section className="pt-20 p-6 max-w-6xl mx-auto bg-white text-gray-900">
+  <section className="pt-20 p-6 max-w-6xl mx-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
     <div className="grid md:grid-cols-2 gap-8">
       {/* Imagen + miniaturas */}
       <div className="flex flex-col gap-4">
@@ -172,10 +172,10 @@ export default function ProductPage({ params }) {
       {/* Info */}
       <div>
         <h1 className="text-4xl font-bold text-orange-600 mb-2">{title}</h1>
-        <p className="text-2xl text-gray-700 font-semibold mb-4">
+        <p className="text-2xl text-gray-700 dark:text-gray-200 font-semibold mb-4">
           ${price_sale.toLocaleString()}
         </p>
-        <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
+        <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">{description}</p>
 
         {/* Botón WhatsApp */}
         <a
@@ -189,10 +189,10 @@ export default function ProductPage({ params }) {
           Comprar por WhatsApp
         </a>
 
-        {/* Sugerir precio (si está habilitado) */}
+        {/* Sugerir precio */}
         {permitirSugerirPrecio && (
           <div className="mt-6">
-            <h2 className="font-semibold text-gray-800 mb-2">
+            <h2 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">
               ¿Querés sugerir un precio?
             </h2>
             <input
@@ -200,7 +200,7 @@ export default function ProductPage({ params }) {
               placeholder="Escribí tu sugerencia"
               value={precioSugerido}
               onChange={(e) => setPrecioSugerido(e.target.value)}
-              className="w-full border border-gray-300 px-3 py-2 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white px-3 py-2 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
             />
             <button
               onClick={handleEnviarSugerencia}
@@ -211,7 +211,6 @@ export default function ProductPage({ params }) {
           </div>
         )}
 
-        {/* Botón Agregar al Carrito */}
         <button
           onClick={agregarAlCarrito}
           className="block w-full mt-4 bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition"
@@ -222,5 +221,6 @@ export default function ProductPage({ params }) {
     </div>
   </section>
 );
+
 
 }
