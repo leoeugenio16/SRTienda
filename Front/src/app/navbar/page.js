@@ -36,14 +36,9 @@ export default function Navbar() {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(
-          "Respuesta de la API de banners:",
-          JSON.stringify(data, null, 2)
-        );
         if (data.data && Array.isArray(data.data)) {
           const parsed = data.data
             .map((item) => {
-              console.log("Procesando banner:", item);
               const desktop = item.desktopImage?.url
                 ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.desktopImage.url}`
                 : null;
@@ -51,7 +46,6 @@ export default function Navbar() {
                 ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.mobileImage[0].url}`
                 : null;
 
-              console.log("URLs generadas:", { desktop, mobile });
 
               return {
                 id: item.id || null,
@@ -62,8 +56,6 @@ export default function Navbar() {
               };
             })
             .filter((banner) => banner.desktopImage || banner.mobileImage);
-
-          console.log("Banners procesados:", parsed);
           setBanners(parsed);
         } else {
           console.warn(

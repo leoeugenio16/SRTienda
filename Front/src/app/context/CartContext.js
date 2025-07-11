@@ -123,13 +123,14 @@ export const CartProvider = ({ children, usuario }) => {
     await guardarCarritoEnStrapi(nuevoCarrito);
   };
 
-  const eliminarProducto = async (documentId) => {
-    const nuevoCarrito = carrito.filter((p) => p.documentId !== documentId);
+  const eliminarProducto = (documentId) => {
+    const nuevoCarrito = carrito.filter(p => {
+      const idProducto = p.documentId || p.id;
+      return idProducto.toString() !== documentId.toString();
+    });
     setCarrito(nuevoCarrito);
     localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
-    await guardarCarritoEnStrapi(nuevoCarrito);
   };
-
   return (
     <CartContext.Provider
       value={{ carrito, agregarProducto, eliminarProducto, carritoId }}

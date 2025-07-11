@@ -34,32 +34,34 @@ export default function CarritoPage() {
 
       <div className="space-y-4">
         {carrito.map((item, index) => (
-  <div
-    key={item.documentId || item.id || index}
-    className="flex items-center justify-between border p-4 rounded-md shadow-sm"
-  >
-    <Link href={`/productos/${item.slug}`} className="flex items-center gap-4 flex-1">
-      <img
-        src={item.imagen || "/placeholder.jpg"}
-        alt={item.nombre}
-        className="w-16 h-16 object-cover rounded"
-      />
-      <div>
-        <h3 className="font-semibold hover:underline text-left">{item.nombre}</h3>
-        <p className="text-sm text-gray-600">
-          ${item.precio} x {item.cantidad}
-        </p>
-      </div>
-    </Link>
+          <div
+            key={item.documentId || item.id || index}
+            className="flex items-center justify-between border p-4 rounded-md shadow-sm"
+          >
+            <Link href={`/productos/${item.slug}`} className="flex items-center gap-4 flex-1">
+              <img
+                src={item.imagen || "/placeholder.jpg"}
+                alt={item.nombre}
+                className="w-16 h-16 object-cover rounded"
+              />
+              <div>
+                <h3 className="font-semibold hover:underline text-left">{item.nombre}</h3>
+                <p className="text-sm text-gray-600">
+                  ${item.precio} x {item.cantidad}
+                </p>
+              </div>
+            </Link>
 
-    <button
-      onClick={() => eliminarProducto(item.documentId || item.id)}
-      className="text-red-500 text-sm hover:underline"
-    >
-      Quitar
-    </button>
-  </div>
-))}
+            <button
+              onClick={() => {
+                console.log("Eliminar producto con ID:", item.documentId || item.id);
+                eliminarProducto(item.documentId || item.id);
+              }}
+            >
+              Quitar
+            </button>
+          </div>
+        ))}
       </div>
 
       <div className="mt-6 text-right font-semibold text-xl">
