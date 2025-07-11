@@ -31,12 +31,6 @@
     "sobreNosotros": {
       "type": "text"
     },
-    "products": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product.product",
-      "mappedBy": "providers"
-    },
     "image": {
       "type": "media",
       "multiple": true,
@@ -47,6 +41,12 @@
         "videos",
         "audios"
       ]
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product.product",
+      "mappedBy": "provider"
     }
   }
 }

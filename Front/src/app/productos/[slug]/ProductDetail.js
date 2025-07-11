@@ -11,76 +11,75 @@ export default function ProductDetail({ product }) {
   const [selectedImage, setSelectedImage] = useState(initialImage);
 
   const agregarAlCarrito = async () => {
-    const token = localStorage.getItem("token");
-    const carritoId = localStorage.getItem("carritoId");
+  const token = localStorage.getItem("token");
+  const carritoId = localStorage.getItem("carritoId");
 
-    const imagen = imageList[0]?.url ? `${baseUrl}${imageList[0].url}` : "/placeholder.jpg";
+  const imagen = imageList[0]?.url ? `${baseUrl}${imageList[0].url}` : "/placeholder.jpg";
 
-    const nuevoProducto = {
-      id,
-      nombre: title,
-      slug,
-      precio: price_sale,
-      imagen,
-      cantidad: 1,
-    };
-
-    // 1. Actualizar localStorage
-    const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
-    const yaExiste = carritoActual.find((p) => p.id === id);
-
-    let nuevoCarrito;
-    if (yaExiste) {
-      nuevoCarrito = carritoActual.map((p) =>
-        p.id === id ? { ...p, cantidad: p.cantidad + 1 } : p
-      );
-    } else {
-      nuevoCarrito = [...carritoActual, nuevoProducto];
-    }
-
-    localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
-    alert("Producto agregado al carrito ✅");
-
-    // 2. Guardar o actualizar carrito en Strapi si usuario está logueado
-    if (token) {
-      try {
-        const payload = {
-          data: {
-            items_json: JSON.stringify(nuevoCarrito),
-          },
-        };
-
-        const url = carritoId
-          ? `${baseUrl}/api/carts/${carritoId}`
-          : `${baseUrl}/api/carts`;
-
-        const method = carritoId ? "PUT" : "POST";
-
-        const res = await fetch(url, {
-          method,
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(payload),
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-          // Si se creó un carrito nuevo, guardar su ID
-          if (!carritoId) {
-            localStorage.setItem("carritoId", data.data.id);
-          }
-          console.log("🟢 Carrito guardado en Strapi:", data);
-        } else {
-          console.warn("⚠️ Error al guardar carrito en Strapi:", data);
-        }
-      } catch (error) {
-        console.error("🔴 Error al conectar con Strapi:", error);
-      }
-    }
+  const nuevoProducto = {
+    documentId: product.documentId || id,
+    nombre: title,
+    slug,
+    precio: price_sale,
+    imagen,
+    cantidad: 1,
+    proveedorDocumentId: product.provider?.documentId || null,
+    proveedorNombre: product.provider?.name || "Desconocido",
+    proveedorWhatsapp: product.provider?.whatsapp || "sin-numero",
   };
+
+  const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
+  const yaExiste = carritoActual.find((p) => p.documentId === nuevoProducto.documentId);
+
+  let nuevoCarrito;
+  if (yaExiste) {
+    nuevoCarrito = carritoActual.map((p) =>
+      p.documentId === nuevoProducto.documentId
+        ? { ...p, cantidad: p.cantidad + 1 }
+        : p
+    );
+  } else {
+    nuevoCarrito = [...carritoActual, nuevoProducto];
+  }
+
+  localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+  alert("Producto agregado al carrito ✅");
+
+  if (token) {
+    try {
+      const payload = {
+        data: {
+          items_json: JSON.stringify(nuevoCarrito),
+        },
+      };
+
+      const url = carritoId
+        ? `${baseUrl}/api/carts/${carritoId}`
+        : `${baseUrl}/api/carts`;
+
+      const method = carritoId ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!carritoId && res.ok) {
+        localStorage.setItem("carritoId", data.data.id);
+      }
+
+    } catch (error) {
+      console.error("🔴 Error al conectar con Strapi:", error);
+    }
+  }
+};
+
   const handleEnviarSugerencia = () => {
   if (!precioSugerido) return alert("Por favor, ingresá un precio");
 

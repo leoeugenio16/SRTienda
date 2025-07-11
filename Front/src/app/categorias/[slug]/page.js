@@ -4,23 +4,34 @@ import { use, useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext"; // ✅ Importar useCart
 
 async function getProductsByCategory(slug) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[category][slug][$eq]=${slug}&populate=images`,
-    { cache: "no-store" }
-  );
+  const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[category][slug][$eq]=${slug}&populate[images][fields][0]=url&populate[provider][fields][0]=name&populate[provider][fields][1]=whatsapp&populate[provider][fields][2]=documentId`;
+
+  console.log("URL de consulta:", url); // para debug
+
+  const res = await fetch(url, {
+    cache: "no-store"
+  });
+
+  if (!res.ok) {
+    console.error("Error en la consulta:", await res.text());
+    return [];
+  }
+
   const data = await res.json();
-  return data.data;
+  console.log("Respuesta de la API:", data);
+  return Array.isArray(data.data) ? data.data : [];
 }
+
 
 export default function CategoriaPage({ params }) {
   const { slug } = use(params);
   const [productos, setProductos] = useState([]);
-  const { agregarProducto } = useCart(); // ✅ Tomar función del contexto
+  const { agregarProducto } = useCart();
 
   useEffect(() => {
     async function fetchData() {
       const productosFiltrados = await getProductsByCategory(slug);
-      setProductos(productosFiltrados);
+      setProductos(productosFiltrados || []);
     }
     fetchData();
   }, [slug]);
@@ -29,17 +40,20 @@ export default function CategoriaPage({ params }) {
     const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
     const nuevoProducto = {
-      documentId: producto.documentId,
-      nombre: producto.title,
-      precio: producto.price_sale,
-      slug: producto.slug,
-      imagen: producto.images?.[0]?.url
-        ? `${baseUrl}${producto.images[0].url}`
-        : "/placeholder.jpg",
-      cantidad: 1,
-    };
+  documentId: producto.documentId || producto.id,
+  nombre: producto.title,
+  precio: producto.price_sale,
+  slug: producto.slug,
+  imagen: producto.images?.[0]?.url
+    ? `${baseUrl}${producto.images[0].url}`
+    : "/placeholder.jpg",
+  cantidad: 1,
+  proveedorDocumentId: producto.provider?.documentId || null,
+  proveedorNombre: producto.provider?.name || "Desconocido",
+  proveedorWhatsapp: producto.provider?.whatsapp || "sin-numero",
+};
 
-    agregarProducto(nuevoProducto); // ✅ usar el contexto
+    agregarProducto(nuevoProducto);
     alert("Producto agregado al carrito ✅");
   };
 

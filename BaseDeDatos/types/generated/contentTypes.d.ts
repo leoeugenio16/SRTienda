@@ -528,7 +528,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     permitirSugerirPrecio: Schema.Attribute.Boolean;
     price_provider: Schema.Attribute.Decimal;
     price_sale: Schema.Attribute.Decimal;
-    providers: Schema.Attribute.Relation<'manyToOne', 'api::provider.provider'>;
+    provider: Schema.Attribute.Relation<'manyToOne', 'api::provider.provider'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'>;
     stock_virtual: Schema.Attribute.Integer;

@@ -53,7 +53,7 @@
     "permitirSugerirPrecio": {
       "type": "boolean"
     },
-    "providers": {
+    "provider": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::provider.provider",
