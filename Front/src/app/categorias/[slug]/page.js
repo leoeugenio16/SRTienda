@@ -58,15 +58,14 @@ export default function CategoriaPage({ params }) {
   };
 
   return (
-    <section className="pt-20 p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center capitalize">
+  <main className="bg-white text-gray-900 min-h-screen">
+    <section className="pt-20 p-6 max-w-6xl mx-auto text-center">
+      <h1 className="text-4xl font-bold mb-6 capitalize text-orange-600">
         Categoría: {slug}
       </h1>
 
       {productos.length === 0 ? (
-        <p className="text-center text-gray-500">
-          No hay productos en esta categoría.
-        </p>
+        <p className="text-gray-500 text-lg">No hay productos en esta categoría.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {productos.map((prod) => {
@@ -78,7 +77,7 @@ export default function CategoriaPage({ params }) {
             return (
               <div
                 key={id}
-                className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition flex flex-col"
+                className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col"
               >
                 <a href={`/productos/${slug}`}>
                   <img
@@ -90,7 +89,7 @@ export default function CategoriaPage({ params }) {
 
                 <div className="p-4 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-lg font-semibold">{title}</h3>
+                    <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
                     <p className="text-sm text-gray-600">
                       ${price_sale.toLocaleString()}
                     </p>
@@ -98,7 +97,7 @@ export default function CategoriaPage({ params }) {
 
                   <button
                     onClick={() => agregarAlCarrito(prod)}
-                    className="mt-4 bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+                    className="mt-4 bg-orange-500 text-white py-2 rounded-full hover:bg-orange-600 transition font-semibold"
                   >
                     Agregar al carrito
                   </button>
@@ -109,5 +108,8 @@ export default function CategoriaPage({ params }) {
         </div>
       )}
     </section>
-  );
+  </main>
+);
+
+
 }

@@ -74,88 +74,89 @@ export default function ProductosPage() {
   };
 
   return (
-    <section className="px-7">
-      <div className="mb-6 flex flex-wrap gap-4 justify-center">
-        <input
-          type="text"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder="Buscar productos..."
-          className="border border-gray-300 rounded px-3 py-2"
-        />
+  <section className="pt-20 p-6 max-w-7xl mx-auto">
+    <div className="mb-8 flex flex-wrap gap-4 justify-center">
+      <input
+        type="text"
+        value={search}
+        onChange={handleSearchChange}
+        placeholder="Buscar productos..."
+        className="border border-gray-300 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+      />
 
-        <select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          className="border border-gray-300 rounded px-3 py-2"
-        >
-          <option value="">Todas las categorías</option>
-          {categorias.map((cat) => (
-            <option key={cat.id} value={cat.slug}>
-              {cat.name}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={sort}
-          onChange={handleSortChange}
-          className="border border-gray-300 rounded px-3 py-2"
-        >
-          <option value="createdAt:desc">Más nuevos</option>
-          <option value="price_sale:asc">Precio menor</option>
-          <option value="price_sale:desc">Precio mayor</option>
-          <option value="title:asc">Nombre A-Z</option>
-          <option value="title:desc">Nombre Z-A</option>
-        </select>
-      </div>
-
-      <h1 className="text-2xl font-bold mb-4 text-center">Todos los productos</h1>
-
-      {productos.length === 0 && !loading && (
-        <p className="text-center">No se encontraron productos.</p>
-      )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {productos.map((product) => (
-          <ProductCard key={product.documentId} product={product} />
+      <select
+        value={selectedCategory}
+        onChange={handleCategoryChange}
+        className="border border-gray-300 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+      >
+        <option value="">Todas las categorías</option>
+        {categorias.map((cat) => (
+          <option key={cat.id} value={cat.slug}>
+            {cat.name}
+          </option>
         ))}
-      </div>
+      </select>
 
-      <div className="flex justify-center mt-6">
-        {loading ? (
-          <div className="loader" />
-        ) : hasMore ? (
-          <button
-            onClick={handleLoadMore}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Ver más
-          </button>
-        ) : (
-          <p className="text-gray-500">No hay más productos</p>
-        )}
-      </div>
+      <select
+        value={sort}
+        onChange={handleSortChange}
+        className="border border-gray-300 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+      >
+        <option value="createdAt:desc">Más nuevos</option>
+        <option value="price_sale:asc">Precio menor</option>
+        <option value="price_sale:desc">Precio mayor</option>
+        <option value="title:asc">Nombre A-Z</option>
+        <option value="title:desc">Nombre Z-A</option>
+      </select>
+    </div>
 
-      <style jsx>{`
-        .loader {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #3498db;
-          border-radius: 50%;
-          width: 30px;
-          height: 30px;
-          animation: spin 1s linear infinite;
+    <h1 className="text-3xl font-bold mb-6 text-center">Todos los productos</h1>
+
+    {productos.length === 0 && !loading && (
+      <p className="text-center text-gray-500">No se encontraron productos.</p>
+    )}
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {productos.map((product) => (
+        <ProductCard key={product.documentId} product={product} />
+      ))}
+    </div>
+
+    <div className="flex justify-center mt-6">
+      {loading ? (
+        <div className="loader" />
+      ) : hasMore ? (
+        <button
+          onClick={handleLoadMore}
+          className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition"
+        >
+          Ver más
+        </button>
+      ) : (
+        <p className="text-gray-500">No hay más productos</p>
+      )}
+    </div>
+
+    <style jsx>{`
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #fb923c;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-
-        @keyframes spin {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
+        100% {
+          transform: rotate(360deg);
         }
-      `}</style>
-    </section>
-  );
+      }
+    `}</style>
+  </section>
+);
+
 }

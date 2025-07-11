@@ -141,83 +141,86 @@ export default function ProductPage({ params }) {
   };
 
   return (
-    <section className="pt-20 p-6 max-w-5xl mx-auto">
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* Imagen + miniaturas */}
-        <div className="flex flex-col gap-4">
-          <img
-            src={selectedImage}
-            alt={title}
-            className="w-full h-[400px] object-cover rounded-lg shadow"
-          />
+  <section className="pt-20 p-6 max-w-6xl mx-auto bg-white text-gray-900">
+    <div className="grid md:grid-cols-2 gap-8">
+      {/* Imagen + miniaturas */}
+      <div className="flex flex-col gap-4">
+        <img
+          src={selectedImage}
+          alt={title}
+          className="w-full h-[400px] object-cover rounded-xl shadow-lg"
+        />
 
-          <div className="flex gap-4 overflow-x-auto">
-            {images.map((img, idx) => {
-              const url = `${baseUrl}${img.url}`;
-              return (
-                <img
-                  key={idx}
-                  src={url}
-                  alt={`Miniatura ${idx + 1}`}
-                  onClick={() => setSelectedImage(url)}
-                  className={`h-20 w-20 object-cover cursor-pointer border rounded hover:scale-105 transition ${
-                    selectedImage === url ? "ring-2 ring-black" : ""
-                  }`}
-                />
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Info */}
-        <div>
-          <h1 className="text-3xl font-bold mb-2">{title}</h1>
-          <p className="text-xl text-gray-700 mb-4">${price_sale.toLocaleString()}</p>
-          <p className="text-gray-600 mb-6">{description}</p>
-
-          {/* Botón WhatsApp */}
-          <a
-            href={`https://wa.me/${provider?.whatsapp || "5492625500165"}?text=${encodeURIComponent(
-              `Hola! Quiero comprar el producto: ${title}`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 transition mb-3"
-          >
-            Comprar por WhatsApp
-          </a>
-
-          {/* Sugerir precio (si está habilitado) */}
-          {permitirSugerirPrecio && (
-            <div className="mt-6">
-              <h2 className="font-semibold text-gray-800 mb-2">
-                ¿Querés sugerir un precio?
-              </h2>
-              <input
-                type="number"
-                placeholder="Escribí tu sugerencia"
-                value={precioSugerido}
-                onChange={(e) => setPrecioSugerido(e.target.value)}
-                className="w-full border px-3 py-2 rounded mb-2"
+        <div className="flex gap-4 overflow-x-auto">
+          {images.map((img, idx) => {
+            const url = `${baseUrl}${img.url}`;
+            return (
+              <img
+                key={idx}
+                src={url}
+                alt={`Miniatura ${idx + 1}`}
+                onClick={() => setSelectedImage(url)}
+                className={`h-20 w-20 object-cover cursor-pointer border rounded-lg hover:scale-105 transition-all duration-200 ${
+                  selectedImage === url ? "ring-2 ring-orange-500" : ""
+                }`}
               />
-              <button
-                onClick={handleEnviarSugerencia}
-                className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition w-full"
-              >
-                Enviar sugerencia por WhatsApp
-              </button>
-            </div>
-          )}
-
-          {/* Botón Agregar al Carrito */}
-          <button
-            onClick={agregarAlCarrito}
-            className="block w-full mt-2 bg-black text-white px-6 py-3 rounded hover:bg-gray-800 transition"
-          >
-            Agregar al carrito
-          </button>
+            );
+          })}
         </div>
       </div>
-    </section>
-  );
+
+      {/* Info */}
+      <div>
+        <h1 className="text-4xl font-bold text-orange-600 mb-2">{title}</h1>
+        <p className="text-2xl text-gray-700 font-semibold mb-4">
+          ${price_sale.toLocaleString()}
+        </p>
+        <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
+
+        {/* Botón WhatsApp */}
+        <a
+          href={`https://wa.me/${provider?.whatsapp || "5492625500165"}?text=${encodeURIComponent(
+            `Hola! Quiero comprar el producto: ${title}`
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block w-full bg-green-600 text-white px-6 py-3 rounded-full text-center font-medium hover:bg-green-700 transition mb-4"
+        >
+          Comprar por WhatsApp
+        </a>
+
+        {/* Sugerir precio (si está habilitado) */}
+        {permitirSugerirPrecio && (
+          <div className="mt-6">
+            <h2 className="font-semibold text-gray-800 mb-2">
+              ¿Querés sugerir un precio?
+            </h2>
+            <input
+              type="number"
+              placeholder="Escribí tu sugerencia"
+              value={precioSugerido}
+              onChange={(e) => setPrecioSugerido(e.target.value)}
+              className="w-full border border-gray-300 px-3 py-2 rounded mb-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+            <button
+              onClick={handleEnviarSugerencia}
+              className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition w-full"
+            >
+              Enviar sugerencia por WhatsApp
+            </button>
+          </div>
+        )}
+
+        {/* Botón Agregar al Carrito */}
+        <button
+          onClick={agregarAlCarrito}
+          className="block w-full mt-4 bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition"
+        >
+          Agregar al carrito
+        </button>
+      </div>
+    </div>
+  </section>
+);
+
 }
