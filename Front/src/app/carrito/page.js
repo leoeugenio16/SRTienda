@@ -64,7 +64,7 @@ export default function CarritoPage() {
     </section>
 
     {/* Carrito por proveedor */}
-    <section className="max-w-4xl mx-auto p-6">
+    <section className="max-w-4xl mx-auto p-4 sm:p-6">
       {Object.entries(proveedoresMap).map(([provId, provData]) => {
         const totalProveedor = provData.productos.reduce(
           (sum, item) => sum + item.precio * item.cantidad,
@@ -74,17 +74,17 @@ export default function CarritoPage() {
         return (
           <div
             key={provId}
-            className="mb-10 border rounded-xl shadow-md p-6"
+            className="mb-10 border rounded-xl shadow-md p-4 sm:p-6"
           >
-            <h2 className="text-2xl font-semibold mb-6 text-center text-orange-600">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center text-orange-600">
               Proveedor: {provData.proveedorNombre}
             </h2>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {provData.productos.map((item, index) => (
                 <div
                   key={item.documentId || item.id || index}
-                  className="relative flex items-center justify-between border rounded-lg shadow-sm p-4 hover:shadow-lg transition"
+                  className="relative flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 border rounded-lg shadow-sm p-4 hover:shadow-lg transition"
                 >
                   {/* Botón eliminar en esquina superior derecha */}
                   <button
@@ -97,7 +97,7 @@ export default function CarritoPage() {
 
                   <Link
                     href={`/productos/${item.slug}`}
-                    className="flex items-center gap-5 flex-1 hover:underline"
+                    className="flex items-center gap-4 flex-1 hover:underline"
                   >
                     <img
                       src={item.imagen || "/placeholder.jpg"}
@@ -105,13 +105,17 @@ export default function CarritoPage() {
                       className="w-20 h-20 object-cover rounded-lg"
                     />
                     <div className="text-left">
-                      <h3 className="font-semibold text-lg">{item.nombre}</h3>
-                      <p className="text-sm text-gray-600">${item.precio.toLocaleString()}</p>
+                      <h3 className="font-semibold text-base sm:text-lg">
+                        {item.nombre}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        ${item.precio.toLocaleString()}
+                      </p>
                     </div>
                   </Link>
 
                   {/* Botones para modificar cantidad */}
-                  <div className="flex items-center gap-3 ml-6">
+                  <div className="flex items-center gap-3 sm:ml-6">
                     <button
                       onClick={() => disminuirCantidad(item.documentId || item.id)}
                       className="p-2 border border-orange-500 rounded-full hover:bg-orange-100 transition"
@@ -119,7 +123,9 @@ export default function CarritoPage() {
                     >
                       <Minus size={18} className="text-orange-600" />
                     </button>
-                    <span className="w-8 text-center font-medium text-lg">{item.cantidad}</span>
+                    <span className="w-8 text-center font-medium text-lg">
+                      {item.cantidad}
+                    </span>
                     <button
                       onClick={() => aumentarCantidad(item.documentId || item.id)}
                       className="p-2 border border-orange-500 rounded-full hover:bg-orange-100 transition"
@@ -132,7 +138,7 @@ export default function CarritoPage() {
               ))}
             </div>
 
-            <div className="mt-6 font-semibold text-right text-xl text-gray-700">
+            <div className="mt-6 font-semibold text-right text-lg sm:text-xl text-gray-700">
               Total proveedor: ${totalProveedor.toLocaleString()}
             </div>
 
@@ -144,7 +150,7 @@ export default function CarritoPage() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-green-600 text-white px-8 py-3 rounded-full hover:bg-green-700 transition font-semibold"
+                className="bg-green-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-green-700 transition font-semibold"
               >
                 Finalizar compra por WhatsApp
               </a>
@@ -153,11 +159,12 @@ export default function CarritoPage() {
         );
       })}
 
-      <div className="max-w-4xl mx-auto mt-10 p-6 bg-orange-100 rounded-xl text-right font-bold text-2xl text-orange-700 shadow-md">
+      <div className="max-w-4xl mx-auto mt-10 p-4 sm:p-6 bg-orange-100 rounded-xl text-right font-bold text-xl sm:text-2xl text-orange-700 shadow-md">
         Total general: ${totalGeneral.toLocaleString()}
       </div>
     </section>
   </main>
 );
+
 
 }
