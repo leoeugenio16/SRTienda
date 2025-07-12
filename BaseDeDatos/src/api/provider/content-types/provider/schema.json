@@ -47,6 +47,12 @@
       "relation": "oneToMany",
       "target": "api::product.product",
       "mappedBy": "provider"
+    },
+    "eventos": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::evento.evento",
+      "mappedBy": "provider"
     }
   }
 }

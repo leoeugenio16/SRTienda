@@ -497,6 +497,51 @@ export interface ApiContrasenaContrasena extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiEventoEvento extends Struct.CollectionTypeSchema {
+  collectionName: 'eventos';
+  info: {
+    description: '';
+    displayName: 'evento';
+    pluralName: 'eventos';
+    singularName: 'evento';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.Text;
+    destacar: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    end_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    estado: Schema.Attribute.Enumeration<
+      ['activo', 'finalizado', 'cancelado']
+    > &
+      Schema.Attribute.DefaultTo<'activo'>;
+    images: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::evento.evento'
+    > &
+      Schema.Attribute.Private;
+    price_sale: Schema.Attribute.Decimal;
+    provider: Schema.Attribute.Relation<'manyToOne', 'api::provider.provider'>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'title'>;
+    start_date: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    whatsapp: Schema.Attribute.String;
+  };
+}
+
 export interface ApiProductProduct extends Struct.CollectionTypeSchema {
   collectionName: 'products';
   info: {
@@ -554,6 +599,7 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    eventos: Schema.Attribute.Relation<'oneToMany', 'api::evento.evento'>;
     image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
@@ -1092,6 +1138,7 @@ declare module '@strapi/strapi' {
       'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
       'api::contrasena.contrasena': ApiContrasenaContrasena;
+      'api::evento.evento': ApiEventoEvento;
       'api::product.product': ApiProductProduct;
       'api::provider.provider': ApiProviderProvider;
       'plugin::content-releases.release': PluginContentReleasesRelease;
