@@ -3,14 +3,12 @@
 import Link from "next/link";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export default function CarritoPage() {
-  const {
-    carrito,
-    eliminarProducto,
-    aumentarCantidad,
-    disminuirCantidad,
-  } = useCart();
+  const { carrito, eliminarProducto, aumentarCantidad, disminuirCantidad, setCarrito } =
+    useCart();
 
   // Agrupamos los productos por proveedorDocumentId
   const proveedoresMap = carrito.reduce((acc, item) => {
@@ -42,6 +40,12 @@ export default function CarritoPage() {
       .join("%0A");
     return `https://wa.me/${proveedorWhatsapp}?text=Hola! Quiero comprar:%0A${mensaje}`;
   };
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("carrito") || "[]");
+    setCarrito(data); 
+  }, [pathname]);
 
   if (carrito.length === 0) {
     return (
@@ -57,115 +61,118 @@ export default function CarritoPage() {
   }
 
   return (
-  <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen">
-    {/* Título */}
-    <section className="pt-20 p-6 max-w-4xl mx-auto text-center">
-      <h1 className="text-4xl font-bold mb-6">Tu Carrito</h1>
-    </section>
+    <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen">
+      {/* Título */}
+      <section className="pt-20 p-6 max-w-4xl mx-auto text-center">
+        <h1 className="text-4xl font-bold mb-6">Tu Carrito</h1>
+      </section>
 
-    {/* Carrito por proveedor */}
-    <section className="max-w-4xl mx-auto p-4 sm:p-6">
-      {Object.entries(proveedoresMap).map(([provId, provData]) => {
-        const totalProveedor = provData.productos.reduce(
-          (sum, item) => sum + item.precio * item.cantidad,
-          0
-        );
+      {/* Carrito por proveedor */}
+      <section className="max-w-4xl mx-auto p-4 sm:p-6">
+        {Object.entries(proveedoresMap).map(([provId, provData]) => {
+          const totalProveedor = provData.productos.reduce(
+            (sum, item) => sum + item.precio * item.cantidad,
+            0
+          );
 
-        return (
-          <div
-            key={provId}
-            className="mb-10 border rounded-xl shadow-md p-4 sm:p-6 bg-white dark:bg-gray-800"
-          >
-            <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center text-orange-600">
-              Proveedor: {provData.proveedorNombre}
-            </h2>
+          return (
+            <div
+              key={provId}
+              className="mb-10 border rounded-xl shadow-md p-4 sm:p-6 bg-white dark:bg-gray-800"
+            >
+              <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-center text-orange-600">
+                Proveedor: {provData.proveedorNombre}
+              </h2>
 
-            <div className="space-y-4 sm:space-y-6">
-              {provData.productos.map((item, index) => (
-                <div
-                  key={item.documentId || item.id || index}
-                  className="relative flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 border rounded-lg shadow-sm p-4 pt-10 hover:shadow-lg transition bg-white dark:bg-gray-700"
-                >
-                  {/* Botón eliminar en esquina superior derecha */}
-                  <button
-                    onClick={() => eliminarProducto(item.documentId || item.id)}
-                    className="absolute top-3 right-3 text-red-600 hover:text-red-800 z-20"
-                    title="Eliminar producto"
+              <div className="space-y-4 sm:space-y-6">
+                {provData.productos.map((item, index) => (
+                  <div
+                    key={item.documentId || item.id || index}
+                    className="relative flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 border rounded-lg shadow-sm p-4 pt-10 hover:shadow-lg transition bg-white dark:bg-gray-700"
                   >
-                    <Trash2 size={20} />
-                  </button>
+                    {/* Botón eliminar en esquina superior derecha */}
+                    <button
+                      onClick={() =>
+                        eliminarProducto(item.documentId || item.id)
+                      }
+                      className="absolute top-3 right-3 text-red-600 hover:text-red-800 z-20"
+                      title="Eliminar producto"
+                    >
+                      <Trash2 size={20} />
+                    </button>
 
-                  <Link
-                    href={`/productos/${item.slug}`}
-                    className="flex items-center gap-4 flex-1 hover:underline"
-                  >
-                    <img
-                      src={item.imagen || "/placeholder.jpg"}
-                      alt={item.nombre}
-                      className="w-20 h-20 object-cover rounded-lg"
-                    />
-                    <div className="text-left">
-                      <h3 className="font-semibold text-base sm:text-lg text-gray-900 dark:text-gray-100">
-                        {item.nombre}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        ${item.precio.toLocaleString()}
-                      </p>
+                    <Link
+                      href={`/productos/${item.slug}`}
+                      className="flex items-center gap-4 flex-1 hover:underline"
+                    >
+                      <img
+                        src={item.imagen || "/placeholder.jpg"}
+                        alt={item.nombre}
+                        className="w-20 h-20 object-cover rounded-lg"
+                      />
+                      <div className="text-left">
+                        <h3 className="font-semibold text-base sm:text-lg text-gray-900 dark:text-gray-100">
+                          {item.nombre}
+                        </h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          ${item.precio.toLocaleString()}
+                        </p>
+                      </div>
+                    </Link>
+
+                    {/* Botones para modificar cantidad */}
+                    <div className="flex items-center gap-3 sm:ml-6 z-10">
+                      <button
+                        onClick={() =>
+                          disminuirCantidad(item.documentId || item.id)
+                        }
+                        className="p-2 border border-orange-500 rounded-full hover:bg-orange-100 dark:hover:bg-orange-200 transition"
+                        aria-label="Disminuir cantidad"
+                      >
+                        <Minus size={18} className="text-orange-600" />
+                      </button>
+                      <span className="w-8 text-center font-medium text-lg text-gray-900 dark:text-gray-100">
+                        {item.cantidad}
+                      </span>
+                      <button
+                        onClick={() =>
+                          aumentarCantidad(item.documentId || item.id)
+                        }
+                        className="p-2 border border-orange-500 rounded-full hover:bg-orange-100 dark:hover:bg-orange-200 transition"
+                        aria-label="Aumentar cantidad"
+                      >
+                        <Plus size={18} className="text-orange-600" />
+                      </button>
                     </div>
-                  </Link>
-
-                  {/* Botones para modificar cantidad */}
-                  <div className="flex items-center gap-3 sm:ml-6 z-10">
-                    <button
-                      onClick={() => disminuirCantidad(item.documentId || item.id)}
-                      className="p-2 border border-orange-500 rounded-full hover:bg-orange-100 dark:hover:bg-orange-200 transition"
-                      aria-label="Disminuir cantidad"
-                    >
-                      <Minus size={18} className="text-orange-600" />
-                    </button>
-                    <span className="w-8 text-center font-medium text-lg text-gray-900 dark:text-gray-100">
-                      {item.cantidad}
-                    </span>
-                    <button
-                      onClick={() => aumentarCantidad(item.documentId || item.id)}
-                      className="p-2 border border-orange-500 rounded-full hover:bg-orange-100 dark:hover:bg-orange-200 transition"
-                      aria-label="Aumentar cantidad"
-                    >
-                      <Plus size={18} className="text-orange-600" />
-                    </button>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              <div className="mt-6 font-semibold text-right text-lg sm:text-xl text-gray-700 dark:text-gray-300">
+                Total proveedor: ${totalProveedor.toLocaleString()}
+              </div>
+
+              <div className="mt-6 text-center">
+                <a
+                  href={generarLinkWhatsApp(
+                    provData.proveedorWhatsapp,
+                    provData.productos
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-green-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-green-700 transition font-semibold"
+                >
+                  Finalizar compra por WhatsApp
+                </a>
+              </div>
             </div>
+          );
+        })}
 
-            <div className="mt-6 font-semibold text-right text-lg sm:text-xl text-gray-700 dark:text-gray-300">
-              Total proveedor: ${totalProveedor.toLocaleString()}
-            </div>
-
-            <div className="mt-6 text-center">
-              <a
-                href={generarLinkWhatsApp(
-                  provData.proveedorWhatsapp,
-                  provData.productos
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-green-600 text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-green-700 transition font-semibold"
-              >
-                Finalizar compra por WhatsApp
-              </a>
-            </div>
-          </div>
-        );
-      })}
-
-      <div className="max-w-4xl mx-auto mt-10 p-4 sm:p-6 bg-orange-100 dark:bg-orange-700 rounded-xl text-right font-bold text-xl sm:text-2xl text-orange-700 dark:text-orange-200 shadow-md">
-        Total general: ${totalGeneral.toLocaleString()}
-      </div>
-    </section>
-  </main>
-);
-
-
-
+        <div className="max-w-4xl mx-auto mt-10 p-4 sm:p-6 bg-orange-100 dark:bg-orange-700 rounded-xl text-right font-bold text-xl sm:text-2xl text-orange-700 dark:text-orange-200 shadow-md">
+          Total general: ${totalGeneral.toLocaleString()}
+        </div>
+      </section>
+    </main>
+  );
 }

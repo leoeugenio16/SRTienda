@@ -178,6 +178,7 @@ export const CartProvider = ({ children, usuario }) => {
         aumentarCantidad,
         disminuirCantidad,
         carritoId,
+        setCarrito,
       }}
     >
       {children}
