@@ -13,7 +13,7 @@ export default function ProductCard({ product }) {
           className="w-full h-60 object-cover"
         />
         <div className="p-4">
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 className="text-lg font-semibold truncate">{title}</h3>
           <p className="text-gray-600">${price_sale.toLocaleString()}</p>
         </div>
       </div>
