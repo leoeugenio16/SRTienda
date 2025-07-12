@@ -70,7 +70,7 @@ export default function CategoriaPage({ params }) {
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {productos.map((prod) => {
+          {productos.filter((product) => !product.vendido).map((prod) => {
             const { id, title, slug, price_sale, images } = prod;
             const imageUrl = images?.[0]?.url
               ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${images[0].url}`

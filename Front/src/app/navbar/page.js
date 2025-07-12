@@ -10,6 +10,7 @@ import {
   CalendarDays,
   User,
   Clock1,
+  Wrench,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -20,7 +21,6 @@ export default function Navbar() {
   const [bannerIndex, setBannerIndex] = useState(0);
   const intervalRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
-  
 
   // Detectar si es móvil
   useEffect(() => {
@@ -105,7 +105,7 @@ export default function Navbar() {
           style={{ height: 64 }}
         >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 ml-[-12px]">
             <Image
               src="/logo.png"
               alt="Logo SRTienda"
@@ -118,18 +118,18 @@ export default function Navbar() {
           {/* Menú escritorio */}
           <nav className="hidden md:flex gap-8 items-center text-sm font-semibold text-orange-600">
             <Link
-              href="/"
-              className="flex items-center gap-1 hover:text-orange-700 transition"
-            >
-              <Home className="w-5 h-5" />
-              Inicio
-            </Link>
-            <Link
               href="/productos"
               className="flex items-center gap-1 hover:text-orange-700 transition"
             >
               <Boxes className="w-5 h-5" />
               Productos
+            </Link>
+            <Link
+              href="/servicios"
+              className="flex items-center gap-1 hover:text-orange-700 transition"
+            >
+              <Wrench className="w-5 h-5" />
+              Servicios
             </Link>
             <Link
               href="/categorias"
@@ -245,6 +245,14 @@ export default function Navbar() {
               Productos
             </Link>
             <Link
+              href="/servicios"
+              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+              onClick={() => setMenuOpen(false)}
+            >
+              <Wrench className="w-5 h-5" />
+              Servicios
+            </Link>
+            <Link
               href="/categorias"
               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
               onClick={() => setMenuOpen(false)}
@@ -254,22 +262,22 @@ export default function Navbar() {
             </Link>
             <Link
               href="/particulares"
-               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
             >
               <Clock1 className="w-5 h-5" />
               Ventas Unicas
             </Link>
             <Link
               href="/vendedores"
-               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
             >
               <User className="w-5 h-5" />
               Vendedores
             </Link>
-            
+
             <Link
               href="/eventos"
-               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
             >
               <CalendarDays className="w-5 h-5" />
               Eventos

@@ -58,8 +58,15 @@
       "type": "enumeration",
       "enum": [
         "Particular",
-        "Comercio"
+        "Comercio",
+        "Servicio"
       ]
+    },
+    "servicios": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::servicio.servicio",
+      "mappedBy": "provider"
     }
   }
 }

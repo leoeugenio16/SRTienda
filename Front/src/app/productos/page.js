@@ -146,10 +146,16 @@ export default function ProductosPage() {
 
     {/* GRILLA DE PRODUCTOS */}
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {productos.map((product) => (
-        <ProductCard key={product.documentId} product={product} />
-      ))}
+      {productos
+          .filter((product) => !product.vendido) // solo productos no vendidos
+          .map((product) => (
+            <ProductCard
+              key={product.documentId || product.id}
+              product={product}
+            />
+          ))}
     </div>
+    
 
     {/* BOTÓN VER MÁS */}
     <div className="flex justify-center mt-6">
