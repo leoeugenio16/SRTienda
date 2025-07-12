@@ -53,6 +53,13 @@
       "relation": "oneToMany",
       "target": "api::evento.evento",
       "mappedBy": "provider"
+    },
+    "tipo": {
+      "type": "enumeration",
+      "enum": [
+        "Particular",
+        "Comercio"
+      ]
     }
   }
 }

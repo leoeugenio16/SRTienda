@@ -8,6 +8,8 @@ import {
   Boxes,
   FolderOpen,
   CalendarDays,
+  User,
+  Clock1,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -136,12 +138,27 @@ export default function Navbar() {
               Categorías
             </Link>
             <Link
+              href="/particulares"
+              className="flex items-center gap-1 hover:text-orange-700 transition"
+            >
+              <Clock1 className="w-5 h-5" />
+              Ventas Unicas
+            </Link>
+            <Link
+              href="/vendedores"
+              className="flex items-center gap-1 hover:text-orange-700 transition"
+            >
+              <User className="w-5 h-5" />
+              vendedores
+            </Link>
+            <Link
               href="/eventos"
-              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+              className="flex items-center gap-1 hover:text-orange-700 transition"
             >
               <CalendarDays className="w-5 h-5" />
               Eventos
             </Link>
+
             <Link
               href="/carrito"
               className="flex items-center gap-1 hover:text-orange-700 transition"
@@ -235,8 +252,23 @@ export default function Navbar() {
               Categorías
             </Link>
             <Link
+              href="/particulares"
+               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            >
+              <Clock1 className="w-5 h-5" />
+              Ventas Unicas
+            </Link>
+            <Link
+              href="/vendedores"
+               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            >
+              <User className="w-5 h-5" />
+              Vendedores
+            </Link>
+            
+            <Link
               href="/eventos"
-              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
             >
               <CalendarDays className="w-5 h-5" />
               Eventos

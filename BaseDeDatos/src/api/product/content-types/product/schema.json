@@ -58,6 +58,10 @@
       "relation": "manyToOne",
       "target": "api::provider.provider",
       "inversedBy": "products"
+    },
+    "vendido": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

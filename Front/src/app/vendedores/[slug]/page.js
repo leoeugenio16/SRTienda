@@ -1,86 +1,137 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
-import ProductCard from "../../../components/ProductCard";
+import { use, useEffect, useState } from "react";
+import Link from "next/link";
+import { Instagram, Phone } from "lucide-react"; // Íconos opcionales
 
-const PAGE_SIZE = 10;
+const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-export default function VendedorPage() {
-  const params = useParams();
-  const slug = params.slug;
+async function getProveedorYProductos(slug) {
+  const urlProveedor = `${baseUrl}/api/providers?filters[slug][$eq]=${slug}&populate=image`;
+  const resProv = await fetch(urlProveedor);
+  const dataProv = await resProv.json();
+  const proveedor = dataProv.data?.[0];
 
+  if (!proveedor) return null;
+
+  const proveedorId = proveedor.id;
+
+  const urlProductos = `${baseUrl}/api/products?filters[provider][id][$eq]=${proveedorId}&populate=images`;
+  const resProds = await fetch(urlProductos);
+  const dataProds = await resProds.json();
+
+  return {
+    proveedor: proveedor,
+    productos: dataProds.data || [],
+  };
+}
+
+export default function ProveedorPage({ params }) {
+  const { slug } = use(params);
+  const [proveedor, setProveedor] = useState(null);
   const [productos, setProductos] = useState([]);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
+    async function fetchData() {
+      const data = await getProveedorYProductos(slug);
+      if (data) {
+        setProveedor(data.proveedor);
+        setProductos(data.productos);
+      }
+    }
+    fetchData();
+  }, [slug]);
 
-    let url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?populate=images&pagination[page]=${page}&pagination[pageSize]=${PAGE_SIZE}&filters[providers][slug][$eq]=${slug}`;
+  if (!proveedor)
+    return <div className="p-6 text-center">Proveedor no encontrado</div>;
 
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        if (page === 1) setProductos(data.data);
-        else setProductos(prev => [...prev, ...data.data]);
+  const { name, image, sobreNosotros, instagram, whatsapp } =
+    proveedor.attributes || proveedor;
 
-        setHasMore(data.data.length === PAGE_SIZE);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [page, slug]);
-
-  const handleLoadMore = () => {
-    if (!loading && hasMore) setPage(p => p + 1);
-  };
+  const imageUrl =
+    image?.[0]?.url ||
+    image?.data?.[0]?.attributes?.url ||
+    "/placeholder-proveedor.jpg";
 
   return (
-    <section className="pt-20 p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center capitalize">
-         {slug?.replace(/-/g, " ")}
-      </h1>
-
-      {productos.length === 0 && !loading && (
-        <p className="text-center text-gray-500">Este vendedor aún no tiene productos.</p>
-      )}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {productos.map((prod) => (
-          <ProductCard key={prod.id} product={prod} />
-        ))}
-      </div>
-
-      <div className="flex justify-center mt-6">
-        {loading ? (
-          <div className="loader" />
-        ) : hasMore ? (
-          <button
-            onClick={handleLoadMore}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Ver más
-          </button>
-        ) : (
-          <p className="text-gray-500">No hay más productos</p>
+    <section className="pt-20 p-6 max-w-6xl mx-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+      <div className="flex flex-col items-center text-center mb-10">
+        <img
+          src={`${baseUrl}${imageUrl}`}
+          alt={name}
+          className="w-36 h-36 rounded-full object-cover border mb-4 transition-transform duration-300 ease-in-out hover:scale-125"
+        />
+        <h1 className="text-3xl font-bold text-orange-600">{name}</h1>
+        {sobreNosotros && (
+          <p className="mt-2 text-gray-700 dark:text-gray-300 max-w-xl">
+            {sobreNosotros}
+          </p>
         )}
+        <div className="flex gap-4 mt-4">
+          <div className="flex gap-4 mt-4">
+            {instagram && (
+              <a
+                href={`https://instagram.com/${instagram.replace("@", "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-pink-100 dark:bg-pink-800 text-pink-600 dark:text-pink-200 p-3 rounded-full shadow-lg hover:scale-110 transition-all"
+                title="Instagram"
+              >
+                <Instagram className="w-6 h-6" />
+              </a>
+            )}
+            {whatsapp && (
+              <a
+                href={`https://wa.me/${whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-200 p-3 rounded-full shadow-lg hover:scale-110 transition-all"
+                title="WhatsApp"
+              >
+                <Phone className="w-6 h-6" />
+              </a>
+            )}
+          </div>
+        </div>
       </div>
 
-      <style jsx>{`
-        .loader {
-          border: 4px solid #f3f3f3;
-          border-top: 4px solid #3498db;
-          border-radius: 50%;
-          width: 30px;
-          height: 30px;
-          animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}</style>
+      <h2 className="text-2xl font-semibold mb-6">Productos publicados</h2>
+
+      {productos.length === 0 ? (
+        <p className="text-gray-500">Este proveedor no tiene productos.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {productos.map((prod) => {
+            const img = prod.images?.[0]?.url || "/placeholder.jpg";
+            return (
+              <Link
+                href={`/productos/${prod.slug}`}
+                key={prod.id}
+                className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition bg-white dark:bg-gray-800"
+              >
+                <img
+                  src={`${baseUrl}${img}`}
+                  alt={prod.title}
+                  className="w-full h-40 object-cover"
+                />
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-orange-600">
+                    {prod.title}
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm mb-1">
+                    ${prod.price_sale?.toLocaleString() || "Consultar"}
+                  </p>
+                  {prod.vendido && (
+                    <p className="text-sm font-semibold text-red-600">
+                      Vendido
+                    </p>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
