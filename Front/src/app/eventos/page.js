@@ -103,7 +103,14 @@ export default function EventosPage() {
   const [destacados, setDestacados] = useState([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [fechasValidas, setFechasValidas] = useState(new Set());
+  const [mostrarIntro, setMostrarIntro] = useState(false);
 
+  useEffect(() => {
+    const yaVisto = sessionStorage.getItem("intro_proveedor");
+    if (!yaVisto) {
+      setMostrarIntro(true);
+    }
+  }, []);
   useEffect(() => {
     async function cargarEventos() {
       const datos = await fetchEventos();
@@ -148,7 +155,33 @@ export default function EventosPage() {
   }, [destacados.length]);
   const eventoDestacado =
     destacados.length > 0 ? destacados[carouselIndex] : null;
-
+  if (mostrarIntro) {
+    return (
+      <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-xl border border-orange-500 max-w-md w-full text-center">
+          <h2 className="text-2xl font-bold text-orange-600 mb-4">
+            🎉 Bienvenido a la sección de eventos
+          </h2>
+          <p className="text-gray-700 dark:text-gray-300 mb-6">
+            En esta sección vas a encontrar todo tipo de eventos ordenados por
+            fecha o destacados. ¿Querés hacer algo el viernes? ¿Salir a comer el
+            sábado? ¿Buscar ferias, música en vivo o actividades al aire libre?
+            Elegí el día que te interesa y descubrí qué está pasando en San
+            Rafael. ¡Siempre hay algo para hacer!
+          </p>
+          <button
+            onClick={() => {
+              sessionStorage.setItem("intro_proveedor", "true");
+              setMostrarIntro(false);
+            }}
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full transition"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    );
+  }
   return (
     <main className="bg-white dark:bg-gray-900 dark:text-white min-h-screen pt-6 p-6 max-w-6xl mx-auto">
       <h1 className="text-4xl font-bold mb-4 text-center text-orange-600">

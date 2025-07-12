@@ -20,6 +20,7 @@ export default function Navbar() {
   const [bannerIndex, setBannerIndex] = useState(0);
   const intervalRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
+  
 
   // Detectar si es móvil
   useEffect(() => {
