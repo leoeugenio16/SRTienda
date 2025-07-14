@@ -34,7 +34,7 @@ export default async function ServiciosPage() {
             <Link
               key={documentId}
               href={`/servicios/${slug}`}
-              className="block bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg overflow-hidden transition p-4"
+              className="block bg-gray dark:bg-gray-800 rounded-lg shadow hover:shadow-lg overflow-hidden transition p-4"
             >
               <h2 className="text-lg font-bold mb-1">{title}</h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">

@@ -118,6 +118,13 @@ export default function Navbar() {
           {/* Menú escritorio */}
           <nav className="hidden md:flex gap-8 items-center text-sm font-semibold text-orange-600">
             <Link
+              href="/categorias"
+              className="flex items-center gap-1 hover:text-orange-700 transition"
+            >
+              <FolderOpen className="w-5 h-5" />
+              Categorías
+            </Link>
+            <Link
               href="/productos"
               className="flex items-center gap-1 hover:text-orange-700 transition"
             >
@@ -131,13 +138,7 @@ export default function Navbar() {
               <Wrench className="w-5 h-5" />
               Servicios
             </Link>
-            <Link
-              href="/categorias"
-              className="flex items-center gap-1 hover:text-orange-700 transition"
-            >
-              <FolderOpen className="w-5 h-5" />
-              Categorías
-            </Link>
+
             <Link
               href="/particulares"
               className="flex items-center gap-1 hover:text-orange-700 transition"
@@ -165,7 +166,6 @@ export default function Navbar() {
               className="flex items-center gap-1 hover:text-orange-700 transition"
             >
               <ShoppingCart className="w-5 h-5" />
-              Carrito
             </Link>
 
             {usuario ? (
@@ -207,19 +207,16 @@ export default function Navbar() {
           >
             <div className="space-y-1">
               <span
-                className={`block w-6 h-0.5 rounded bg-orange-600 transition-transform ${
-                  menuOpen ? "rotate-45 translate-y-1.5" : ""
-                }`}
+                className={`block w-6 h-0.5 rounded bg-orange-600 transition-transform ${menuOpen ? "rotate-45 translate-y-1.5" : ""
+                  }`}
               />
               <span
-                className={`block w-6 h-0.5 rounded bg-orange-600 transition-opacity ${
-                  menuOpen ? "opacity-0" : "opacity-100"
-                }`}
+                className={`block w-6 h-0.5 rounded bg-orange-600 transition-opacity ${menuOpen ? "opacity-0" : "opacity-100"
+                  }`}
               />
               <span
-                className={`block w-6 h-0.5 rounded bg-orange-600 transition-transform ${
-                  menuOpen ? "-rotate-45 -translate-y-1.5" : ""
-                }`}
+                className={`block w-6 h-0.5 rounded bg-orange-600 transition-transform ${menuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                  }`}
               />
             </div>
           </button>
@@ -343,17 +340,17 @@ export default function Navbar() {
             {(isMobile
               ? banners[bannerIndex]?.mobileImage
               : banners[bannerIndex]?.desktopImage) && (
-              <img
-                src={
-                  isMobile
-                    ? banners[bannerIndex].mobileImage
-                    : banners[bannerIndex].desktopImage
-                }
-                alt={banners[bannerIndex]?.name || "Banner"}
-                className="w-full h-full object-cover transition-opacity duration-1000"
-                loading="lazy"
-              />
-            )}
+                <img
+                  src={
+                    isMobile
+                      ? banners[bannerIndex].mobileImage
+                      : banners[bannerIndex].desktopImage
+                  }
+                  alt={banners[bannerIndex]?.name || "Banner"}
+                  className="w-full h-full object-cover transition-opacity duration-1000"
+                  loading="lazy"
+                />
+              )}
           </a>
         )}
       </div>

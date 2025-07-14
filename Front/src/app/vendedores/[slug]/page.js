@@ -112,7 +112,7 @@ export default function ProveedorPage({ params }) {
                 <img
                   src={`${baseUrl}${img}`}
                   alt={prod.title}
-                  className="w-full h-40 object-cover"
+                  className="w-full h-[400px] object-contain bg-white rounded-xl shadow-lg"
                 />
                 <div className="p-4">
                   <h3 className="text-lg font-semibold text-orange-600">
