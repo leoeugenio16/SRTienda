@@ -24,7 +24,7 @@ export default function ProductCard({ product }) {
   return (
     <div className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white dark:bg-gray-800">
       <Link href={`/productos/${slug}`}>
-        <img src={imageUrl} alt={title} className="w-full h-60 object-cover" />
+        <img src={imageUrl} alt={title} className="w-full h-[400px] object-contain bg-white rounded-xl shadow-lg" />
       </Link>
 
       <div className="p-4">
