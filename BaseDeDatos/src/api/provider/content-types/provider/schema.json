@@ -67,6 +67,12 @@
       "relation": "oneToMany",
       "target": "api::servicio.servicio",
       "mappedBy": "provider"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "provider_profile"
     }
   }
 }

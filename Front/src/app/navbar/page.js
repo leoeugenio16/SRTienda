@@ -189,12 +189,12 @@ export default function Navbar() {
                 >
                   Iniciar sesión
                 </Link>
-                <Link
+                {/* <Link
                   href="/registro"
                   className="hover:text-orange-700 transition"
                 >
                   Registrarse
-                </Link>
+                </Link> */}
               </>
             )}
           </nav>
@@ -312,13 +312,13 @@ export default function Navbar() {
                 >
                   Iniciar sesión
                 </Link>
-                <Link
+                {/* <Link
                   href="/registro"
                   className="block py-3 text-orange-600 hover:text-orange-700 transition font-medium"
                   onClick={() => setMenuOpen(false)}
                 >
                   Registrarse
-                </Link>
+                </Link> */}
               </>
             )}
           </div>

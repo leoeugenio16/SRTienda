@@ -62,6 +62,10 @@
     "vendido": {
       "type": "boolean",
       "default": false
+    },
+    "visible": {
+      "type": "boolean",
+      "default": true
     }
   }
 }
