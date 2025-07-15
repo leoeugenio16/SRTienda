@@ -21,7 +21,7 @@ export default function LoginPage() {
     if (data.jwt) {
       localStorage.setItem("token", data.jwt);
       localStorage.setItem("user", JSON.stringify(data.user));
-      router.push("/");
+      router.push("/proveedor/panel");
     } else {
       setError(data.error?.message || "Credenciales inválidas");
     }
