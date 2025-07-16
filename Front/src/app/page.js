@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getImageUrl } from "../utils/getImageUrl";
 
 async function getDestacados() {
   const res = await fetch(
@@ -49,9 +50,7 @@ export default async function Home() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {productosDestacados.map((prod) => {
           const { id, title, slug, price_sale, images } = prod;
-          const imageUrl = images?.[0]?.url
-            ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${images[0].url}`
-            : "/placeholder.jpg";
+          const imageUrl = getImageUrl(images?.[0]);
 
           return (
             <Link href={`/productos/${slug}`} key={id}>

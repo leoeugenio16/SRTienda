@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Instagram, MessageCircle } from "lucide-react";
+import { getImageUrl } from "../utils/getImageUrl";
 
 export default function ProviderCard({ provider }) {
   const {
@@ -14,9 +15,9 @@ export default function ProviderCard({ provider }) {
   } = provider;
 
   const imageUrl =
-  provider.image && provider.image.length > 0
-    ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${provider.image[0].url}`
-    : "/placeholder.jpg";
+    provider.image && provider.image.length > 0
+      ? getImageUrl(provider.image[0])
+      : "/placeholder.jpg";
 
   return (
     <div className="bg-white rounded-xl shadow hover:shadow-lg overflow-hidden transition">
