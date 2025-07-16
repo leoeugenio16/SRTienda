@@ -463,6 +463,10 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'name'>;
+    subcategories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::subcategory.subcategory'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -577,6 +581,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'>;
     stock_virtual: Schema.Attribute.Integer;
+    subcategory: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::subcategory.subcategory'
+    >;
     title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -662,6 +670,39 @@ export interface ApiServicioServicio extends Struct.CollectionTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
     title: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSubcategorySubcategory extends Struct.CollectionTypeSchema {
+  collectionName: 'subcategories';
+  info: {
+    displayName: 'subcategory';
+    pluralName: 'subcategories';
+    singularName: 'subcategory';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    category: Schema.Attribute.Relation<'manyToOne', 'api::category.category'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descriptions: Schema.Attribute.Text;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::subcategory.subcategory'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1190,6 +1231,7 @@ declare module '@strapi/strapi' {
       'api::product.product': ApiProductProduct;
       'api::provider.provider': ApiProviderProvider;
       'api::servicio.servicio': ApiServicioServicio;
+      'api::subcategory.subcategory': ApiSubcategorySubcategory;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

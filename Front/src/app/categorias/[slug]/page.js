@@ -53,12 +53,15 @@ export default function CategoriaPage({ params }) {
     agregarProducto(nuevoProducto);
     alert("Producto agregado al carrito ✅");
   };
+  const categoriaFormateada = slug
+  .replace(/-/g, ' ')               // Quita los guiones
+  .replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
     <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen">
       <section className="pt-20 p-6 max-w-6xl mx-auto text-center">
         <h1 className="text-4xl font-bold mb-6 capitalize text-orange-600">
-          Categoría: {slug}
+          Categoría: {categoriaFormateada}
         </h1>
 
         {productos.length === 0 ? (
