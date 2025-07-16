@@ -13,13 +13,13 @@
   "dependencies": {
     "@strapi/plugin-cloud": "5.10.4",
     "@strapi/plugin-users-permissions": "5.10.4",
+    "@strapi/provider-upload-cloudinary": "^5.18.0",
     "@strapi/strapi": "5.10.4",
     "@swc/core": "^1.3.92",
     "pg": "8.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
-    "strapi-provider-upload-cloudinary": "^3.6.11",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {
