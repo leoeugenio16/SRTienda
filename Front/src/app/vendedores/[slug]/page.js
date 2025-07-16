@@ -2,7 +2,8 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { Instagram, Phone } from "lucide-react"; // Íconos opcionales
+import { Instagram, Phone } from "lucide-react";
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
@@ -48,16 +49,15 @@ export default function ProveedorPage({ params }) {
   const { name, image, sobreNosotros, instagram, whatsapp } =
     proveedor.attributes || proveedor;
 
-  const imageUrl =
-    image?.[0]?.url ||
-    image?.data?.[0]?.attributes?.url ||
-    "/placeholder-proveedor.jpg";
+  const imageUrl = getImageUrl(
+    image?.[0] || image?.data?.[0]?.attributes || null
+  );
 
   return (
     <section className="pt-20 p-6 max-w-6xl mx-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       <div className="flex flex-col items-center text-center mb-10">
         <img
-          src={`${baseUrl}${imageUrl}`}
+          src={imageUrl}
           alt={name}
           className="w-36 h-36 rounded-full object-cover border mb-4 transition-transform duration-300 ease-in-out hover:scale-125"
         />
@@ -102,7 +102,7 @@ export default function ProveedorPage({ params }) {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {productos.map((prod) => {
-            const img = prod.images?.[0]?.url || "/placeholder.jpg";
+            const imageUrl = getImageUrl(prod.images?.[0]);
             return (
               <Link
                 href={`/productos/${prod.slug}`}
@@ -110,7 +110,7 @@ export default function ProveedorPage({ params }) {
                 className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition bg-white dark:bg-gray-800"
               >
                 <img
-                  src={`${baseUrl}${img}`}
+                  src={imageUrl}
                   alt={prod.title}
                   className="w-full h-[400px] object-contain bg-white rounded-xl shadow-lg"
                 />
