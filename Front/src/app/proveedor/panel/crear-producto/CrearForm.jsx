@@ -1,5 +1,6 @@
 // src/app/proveedor/panel/crear-producto/CrearForm.jsx
 "use client";
+import { getImageUrl } from "../../../../utils/getImageUrl";
 import { useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -203,9 +204,7 @@ export default function CrearProductoForm({
         </label>
         <div className="flex gap-4 overflow-x-auto">
           {images.map((img, idx) => {
-            const url = img.url.startsWith("http")
-              ? img.url
-              : `${baseUrl}${img.url}`;
+            const url = getImageUrl(img);
             return (
               <div
                 key={img.id || idx}

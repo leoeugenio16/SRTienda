@@ -1,4 +1,5 @@
 "use client";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 import Link from "next/link";
 import { Trash2, Plus, Minus } from "lucide-react";
@@ -44,7 +45,7 @@ export default function CarritoPage() {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("carrito") || "[]");
-    setCarrito(data); 
+    setCarrito(data);
   }, [pathname]);
 
   if (carrito.length === 0) {
@@ -106,7 +107,7 @@ export default function CarritoPage() {
                       className="flex items-center gap-4 flex-1 hover:underline"
                     >
                       <img
-                        src={item.imagen || "/placeholder.jpg"}
+                        src={getImageUrl(item.imagen)}
                         alt={item.nombre}
                         className="w-20 h-20 object-cover rounded-lg"
                       />

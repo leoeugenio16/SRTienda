@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { getImageUrl } from "../../utils/getImageUrl";
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import {
   ShoppingCart,
   Home,
@@ -48,12 +49,10 @@ export default function Navbar() {
         if (data.data && Array.isArray(data.data)) {
           const parsed = data.data
             .map((item) => {
-              const desktop = item.desktopImage?.url
-                ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.desktopImage.url}`
-                : null;
-              const mobile = item.mobileImage?.[0]?.url
-                ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${item.mobileImage[0].url}`
-                : null;
+              const desktop = getImageUrl(item.desktopImage);
+              const mobile = Array.isArray(item.mobileImage)
+              ? getImageUrl(item.mobileImage[0])
+              : getImageUrl(item.mobileImage);
 
               return {
                 id: item.id || null,

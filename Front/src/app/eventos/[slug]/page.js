@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
+import { getImageUrl } from "../../../utils/getImageUrl"; // Ajustá esta ruta
 
 export default function EventoSlugPage({ params }) {
   const { slug } = use(params);
@@ -21,18 +22,7 @@ export default function EventoSlugPage({ params }) {
           throw new Error("Evento no encontrado");
 
         const item = data.data[0];
-
-        const imagesData = item.images || [];
-        const images = Array.isArray(imagesData)
-          ? imagesData.map((img) => {
-              const url = img.url || "";
-              return {
-                url: url.startsWith("http")
-                  ? url
-                  : process.env.NEXT_PUBLIC_STRAPI_URL + url,
-              };
-            })
-          : [];
+        const images = item.images || [];
 
         setEvento({
           ...item,
@@ -40,11 +30,7 @@ export default function EventoSlugPage({ params }) {
         });
 
         if (images.length > 0) {
-          setSelectedImage(
-            images[0].url.startsWith("http")
-              ? images[0].url
-              : process.env.NEXT_PUBLIC_STRAPI_URL + images[0].url
-          );
+          setSelectedImage(images[0]);
         }
 
         setLoading(false);
@@ -59,8 +45,7 @@ export default function EventoSlugPage({ params }) {
   if (loading) return <p>Cargando...</p>;
   if (!evento) return <p>Evento no encontrado.</p>;
 
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || "";
-  const { title, description, price_sale, images, provider } = evento;
+  const { title, description, price_sale, images } = evento;
 
   return (
     <section className="pt-20 p-6 max-w-6xl mx-auto bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
@@ -68,24 +53,24 @@ export default function EventoSlugPage({ params }) {
         {/* Imagen principal + miniaturas */}
         <div className="flex flex-col gap-4">
           <img
-            src={selectedImage || "/placeholder.jpg"}
+            src={getImageUrl(selectedImage) || "/placeholder.jpg"}
             alt={title}
             className="w-full h-[300px] md:h-[400px] object-cover rounded-xl shadow-lg"
           />
           {images.length > 1 && (
             <div className="flex gap-4 overflow-x-auto">
               {images.map((img, idx) => {
-                const url = img.url.startsWith("http")
-                  ? img.url
-                  : baseUrl + img.url;
+                const url = getImageUrl(img);
                 return (
                   <img
                     key={idx}
                     src={url}
                     alt={`Miniatura ${idx + 1}`}
-                    onClick={() => setSelectedImage(url)}
+                    onClick={() => setSelectedImage(img)}
                     className={`h-20 w-20 object-cover cursor-pointer border rounded-lg hover:scale-105 transition-transform duration-200 ${
-                      selectedImage === url ? "ring-2 ring-orange-500" : ""
+                      getImageUrl(selectedImage) === url
+                        ? "ring-2 ring-orange-500"
+                        : ""
                     }`}
                   />
                 );
@@ -109,7 +94,7 @@ export default function EventoSlugPage({ params }) {
           {/* Botón Comprar por WhatsApp */}
           <a
             href={`https://wa.me/${
-              provider?.whatsapp || "5492625500165"
+              evento.provider?.whatsapp || "5492625500165"
             }?text=${encodeURIComponent(
               `Hola! Quiero comprar el producto: ${title}`
             )}`}

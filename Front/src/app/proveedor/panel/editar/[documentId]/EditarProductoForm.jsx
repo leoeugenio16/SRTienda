@@ -195,8 +195,7 @@ export default function EditarProductoForm({ producto, baseUrl }) {
                     {images.map((img, idx) => {
                         const key = img.documentId || img.id || `temp-${idx}`; // fallback seguro
 
-                        const url = img.url || "";
-                        const fullUrl = url.startsWith("http") ? url : `${baseUrl}${url}`;
+                        const fullUrl = getImageUrl(img);
 
                         return (
                             <div

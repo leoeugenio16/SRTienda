@@ -1,25 +1,17 @@
+import { getImageUrl } from "../utils/getImageUrl";
 import Link from "next/link";
 
 export default function ProductCard({ product }) {
   const { title, price_sale, slug, images, provider } = product;
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-  const imageUrl = images?.[0]?.url
-    ? `${baseUrl}${images[0].url}`
-    : "/placeholder.jpg";
+  const imageUrl = getImageUrl(images?.[0]);
 
   // 🔍 Verificar provider.image y su formato
   console.log("🟡 Imagen del proveedor:", provider?.image);
 
-  let providerImageUrl = "/placeholder.jpg";
-  if (
-    provider?.image &&
-    Array.isArray(provider.image) &&
-    provider.image.length > 0 &&
-    provider.image[0]?.url
-  ) {
-    providerImageUrl = `${baseUrl}${provider.image[0].url}`;
-  }
+  let providerImageUrl = getImageUrl(provider?.image?.[0]);;
+  
 
   return (
     <div className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white dark:bg-gray-800">

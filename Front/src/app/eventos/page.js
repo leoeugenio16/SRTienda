@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 function formatFecha(fechaStr) {
   const d = new Date(fechaStr);
@@ -217,7 +218,7 @@ export default function EventosPage() {
                     className="relative w-1/2 md:w-1/4 h-48 rounded-lg shadow-lg overflow-hidden cursor-pointer bg-white dark:bg-gray-800 flex-shrink-0"
                   >
                     <img
-                      src={evento.images?.[0]?.url || "/placeholder.jpg"}
+                      src={getImageUrl(evento.images?.[0]) }
                       alt={evento.title}
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -287,7 +288,7 @@ export default function EventosPage() {
                   className="block border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white dark:bg-gray-800"
                 >
                   <img
-                    src={evento.images?.[0]?.url || "/placeholder.jpg"}
+                    src={getImageUrl(evento.images?.[0]) || "/placeholder.jpg"}
                     alt={evento.title}
                     className="w-full h-48 object-cover"
                   />

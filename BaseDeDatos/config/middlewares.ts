@@ -7,8 +7,16 @@ module.exports = [
         useDefaults: true,
         directives: {
           'connect-src': ["'self'", 'https:'],
-          'img-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com'],
-          'media-src': ["'self'", 'data:', 'blob:', 'res.cloudinary.com'],
+          'img-src': [
+            "'self'", 'data:', 'blob:',
+            'https://*.cloudinary.com',  // permite PNG/JPG/etc
+            'https://res.cloudinary.com'
+          ],
+          'media-src': [
+            "'self'", 'data:', 'blob:',
+            'https://*.cloudinary.com',  // permite reproducir como imagen
+            'https://res.cloudinary.com'
+          ],
           upgradeInsecureRequests: null,
         },
       },
