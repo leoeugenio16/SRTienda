@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { getImageUrl } from "../utils/getImageUrl";
 
+async function getCategorias() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/categories?populate=image`,
+    { cache: "no-store" }
+  );
+  const data = await res.json();
+  return data.data;
+}
+
 async function getDestacados() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[highlight][$eq]=true&populate=images`,
@@ -10,69 +19,119 @@ async function getDestacados() {
   return data.data;
 }
 
+async function getEventosDestacados() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/eventos?populate=images&filters[estado][$eq]=activo&filters[destacar][$eq]=true&sort=start_date:asc`,
+    { cache: "no-store" }
+  );
+  const data = await res.json();
+  return data.data;
+}
+
 export default async function Home() {
-  const productosDestacados = await getDestacados();
+  const [categorias, productosDestacados, eventosDestacados] = await Promise.all([
+    getCategorias(),
+    getDestacados(),
+    getEventosDestacados(),
+  ]);
 
   return (
-  <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
-    {/* HERO */}
-    <section className="w-full h-[60vh] bg-[url('/banner.jpg')] bg-cover bg-center flex items-center justify-center">
-      <div className="bg-black/50 p-6 rounded-xl text-center text-white">
-        <h1 className="text-4xl md:text-5xl font-bold">TIENDA OFICIAL</h1>
-        <p className="mt-2 text-lg">Ropa y accesorios exclusivos</p>
-        <Link href="/productos">
-          <button className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-full font-medium hover:bg-orange-600 transition">
-            Ver catálogo
-          </button>
+    <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+      {/* CATEGORÍAS EN CÍRCULOS */}
+<section className="p-6 text-center">
+  <h2 className="text-2xl font-semibold mb-4">Categorías</h2>
+  <div className="flex gap-4 overflow-x-auto justify-start px-4">
+    {categorias.map((cat) => {
+      const { id, name, slug, image } = cat;
+      const imageUrl = getImageUrl(image);
+
+      return (
+        <Link
+          key={id}
+          href={`/categorias/${slug}`}
+          className="flex flex-col items-center flex-shrink-0 w-24"
+        >
+          <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center">
+            <img
+              src={imageUrl}
+              alt={name}
+              className="w-10 h-10 object-contain"
+            />
+          </div>
+          <span className="mt-1 text-xs text-gray-800 dark:text-white text-center leading-tight break-words max-w-[5rem]">
+            {name}
+          </span>
         </Link>
-      </div>
-    </section>
+      );
+    })}
+  </div>
+</section>
 
-    {/* CATEGORÍAS */}
-    <section className="p-4 text-center">
-      <h2 className="text-2xl font-semibold mb-4">Categorías</h2>
-      <div className="flex gap-4 justify-center flex-wrap">
-        {["Remeras", "Buzos", "Accesorios", "Infantil"].map((cat) => (
-          <Link
-            key={cat}
-            href={`/categorias/${cat.toLowerCase()}`}
-            className="bg-orange-100 hover:bg-orange-200 text-orange-800 px-4 py-2 rounded-full text-sm font-medium transition"
-          >
-            {cat}
-          </Link>
-        ))}
-      </div>
-    </section>
+      {/* PRODUCTOS DESTACADOS */}
+      <section className="p-4">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Productos Destacados</h2>
+        <div className="flex gap-4 overflow-x-auto px-4">
+          {productosDestacados.map((prod) => {
+            const { id, title, slug, price_sale, images } = prod;
+            const imageUrl = getImageUrl(images?.[0]);
 
-    {/* DESTACADOS */}
-    <section className="p-4">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Productos Destacados</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {productosDestacados.map((prod) => {
-          const { id, title, slug, price_sale, images } = prod;
-          const imageUrl = getImageUrl(images?.[0]);
-
-          return (
-            <Link href={`/productos/${slug}`} key={id}>
-              <div className="border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition bg-white dark:bg-gray-800">
-                <img src={imageUrl} alt={title} className="w-full h-60 object-cover" />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold">{title}</h3>
+            return (
+              <Link
+                href={`/productos/${slug}`}
+                key={id}
+                className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0"
+              >
+                <img
+                  src={imageUrl}
+                  alt={title}
+                  className="w-full h-40 object-cover rounded-t-xl"
+                />
+                <div className="p-3">
+                  <h3 className="text-sm font-semibold">{title}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
                     ${price_sale.toLocaleString()}
                   </p>
-                  <button className="mt-2 w-full bg-orange-500 text-white py-2 rounded hover:bg-orange-600 transition">
-                    Ver más
-                  </button>
                 </div>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </section>
-  </main>
-);
+              </Link>
+            );
+          })}
+        </div>
+      </section>
 
+      {/* EVENTOS DESTACADOS */}
+      {eventosDestacados.length > 0 && (
+        <section className="p-4">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Eventos Destacados</h2>
+          <div className="flex gap-4 overflow-x-auto px-4">
+            {eventosDestacados.map((evento) => {
+              const imageUrl = getImageUrl(evento.images?.[0]);
+
+              return (
+                <Link
+                  href={`/eventos/${evento.slug}`}
+                  key={evento.id}
+                  className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={evento.title}
+                    className="w-full h-40 object-cover rounded-t-xl"
+                  />
+                  <div className="p-3">
+                    <h3 className="text-sm font-semibold">{evento.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      ${evento.price_sale.toLocaleString()}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {new Date(evento.start_date).toLocaleDateString()}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+    </main>
+  );
 }
-
