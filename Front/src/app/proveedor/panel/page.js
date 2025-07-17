@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 export default function PanelProveedor() {
   const [usuario, setUsuario] = useState(null);
@@ -101,33 +102,63 @@ export default function PanelProveedor() {
       <h2 className="text-xl font-semibold mb-4">Tus productos publicados</h2>
 
       {productos.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {productos.map((prod) => {
-            const imageUrl = prod.images?.[0]?.url
-              ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${prod.images[0].url}`
-              : "/placeholder.jpg";
+            const imageUrl = getImageUrl(prod.images?.[0]);
+            const providerImageUrl = getImageUrl(prod.provider?.image?.[0]);
 
             return (
-              <div key={prod.id} className="border rounded shadow p-4 flex flex-col">
-                <img
-                  src={imageUrl}
-                  alt={prod.title}
-                  className="h-40 w-full object-cover rounded mb-2"
-                />
-                <h3 className="text-lg font-bold">{prod.title}</h3>
-                <p className="text-sm text-gray-600 mb-2">
-                  ${prod.price_sale?.toLocaleString()}
-                </p>
-                <div className="mt-auto flex gap-2">
+              <div
+                key={prod.id}
+                className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white dark:bg-gray-800 flex flex-col max-h-[360px]"
+              >
+                <Link href={`/productos/${prod.slug}`}>
+                  <img
+                    src={imageUrl}
+                    alt={prod.title}
+                    className="w-full h-28 sm:h-36 md:h-40 object-contain bg-white rounded-t-lg"
+                  />
+                </Link>
+
+                <div className="p-3 flex flex-col flex-grow">
+                  <Link href={`/productos/${prod.slug}`}>
+                    <h3 className="text-sm font-normal line-clamp-2 text-gray-900 dark:text-white">
+                      {prod.title}
+                    </h3>
+                  </Link>
+
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    ${prod.price_sale?.toLocaleString()}
+                  </p>
+
+                  {prod.provider && (
+                    <Link
+                      href={`/vendedores/${prod.provider.slug}`}
+                      className="flex items-center gap-2 mt-auto hover:opacity-90"
+                    >
+                      <img
+                        src={providerImageUrl}
+                        alt={prod.provider.name}
+                        className="w-6 h-6 rounded-full object-cover border"
+                      />
+                      <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-200 font-medium truncate max-w-[100px]">
+                        {prod.provider.name}
+                      </span>
+                    </Link>
+
+                  )}
+                </div>
+                {/* Botones Ver y Editar */}
+                <div className="flex justify-center gap-2 mt-4">
                   <Link
                     href={`/productos/${prod.slug}`}
-                    className="text-blue-600 text-sm hover:underline"
+                    className="px-3 py-1 text-xs bg-orange-500 text-white rounded-full hover:bg-orange-600 transition"
                   >
                     Ver
                   </Link>
                   <Link
-                    href={`/proveedor/panel/editar/${prod.documentId}`}
-                    className="text-orange-600 text-sm hover:underline"
+                    href={`/proveedor/panel/editar/${prod.documentId}?slug=${prod.slug}`}
+                    className="px-3 py-1 text-xs bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
                   >
                     Editar
                   </Link>

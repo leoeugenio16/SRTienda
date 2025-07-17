@@ -51,8 +51,8 @@ export default function Navbar() {
             .map((item) => {
               const desktop = getImageUrl(item.desktopImage);
               const mobile = Array.isArray(item.mobileImage)
-              ? getImageUrl(item.mobileImage[0])
-              : getImageUrl(item.mobileImage);
+                ? getImageUrl(item.mobileImage[0])
+                : getImageUrl(item.mobileImage);
 
               return {
                 id: item.id || null,
@@ -169,9 +169,17 @@ export default function Navbar() {
 
             {usuario ? (
               <>
-                <span className="text-orange-700 font-medium">
-                  Hola, {usuario.username}
-                </span>
+                <div className="flex flex-col items-start text-orange-700 font-medium">
+                  <span>
+                    Hola, {usuario.username}
+                  </span>
+                  <Link
+                    href={`/proveedor/panel`}
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    Ver panel
+                  </Link>
+                </div>
                 <button
                   onClick={cerrarSesion}
                   className="text-red-600 text-sm hover:underline ml-2"
@@ -222,8 +230,52 @@ export default function Navbar() {
         </div>
 
         {/* Menú móvil */}
+
         {menuOpen && (
+
           <div className="md:hidden bg-white px-6 pb-6 shadow-md border-t border-orange-200">
+            {usuario ? (
+              <>
+                <div className="flex flex-col items-start text-orange-700 font-medium">
+                  <span>
+                    Hola, {usuario.username}
+                  </span>
+                  <Link
+                    href={`/proveedor/panel`}
+                    className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Ver panel
+                  </Link>
+                </div>
+                <button
+                  onClick={() => {
+                    cerrarSesion();
+                    setMenuOpen(false);
+                  }}
+                  className="bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
+                >
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="block py-3 text-orange-600 hover:text-orange-700 transition font-medium"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Iniciar sesión
+                </Link>
+                {/* <Link
+                  href="/registro"
+                  className="block py-3 text-orange-600 hover:text-orange-700 transition font-medium"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Registrarse
+                </Link> */}
+              </>
+            )}
             <Link
               href="/"
               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
@@ -287,39 +339,7 @@ export default function Navbar() {
               Carrito
             </Link>
 
-            {usuario ? (
-              <>
-                <p className="py-3 text-orange-600 font-medium">
-                  Hola, {usuario.username}
-                </p>
-                <button
-                  onClick={() => {
-                    cerrarSesion();
-                    setMenuOpen(false);
-                  }}
-                  className="text-red-600 py-2 text-sm hover:underline"
-                >
-                  Cerrar sesión
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="block py-3 text-orange-600 hover:text-orange-700 transition font-medium"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Iniciar sesión
-                </Link>
-                {/* <Link
-                  href="/registro"
-                  className="block py-3 text-orange-600 hover:text-orange-700 transition font-medium"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Registrarse
-                </Link> */}
-              </>
-            )}
+
           </div>
         )}
       </header>

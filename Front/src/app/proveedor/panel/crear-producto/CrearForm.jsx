@@ -92,10 +92,10 @@ export default function CrearProductoForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
-    
+
     /* 1. Crear documentoId para el nuevo producto */
     const documentId = uuidv4();
-    
+
     /* 2. Publicar producto */
     const slug = await generarSlugUnico(title);
     const payload = {
@@ -180,7 +180,10 @@ export default function CrearProductoForm({
         value={description}
         onChange={(e) => setDesc(e.target.value)}
       />
-
+      <p className="text-sm text-red-600 font-medium mb-2">
+        ⚠️ Ingresá el número completo sin puntos ni comas. <br />
+        Ejemplo: <strong>1000</strong> en lugar de <strong>1.000</strong> o <strong>1,000</strong>
+      </p>
       <input
         type="number"
         className="border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg p-3 w-full mb-6 focus:outline-none focus:ring-2 focus:ring-orange-500"

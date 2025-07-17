@@ -1,4 +1,5 @@
 'use client';
+import { getImageUrl } from '../../../../../utils/getImageUrl';
 import { useState, useRef } from 'react';
 const originalWarn = console.warn;
 
@@ -165,6 +166,10 @@ export default function EditarProductoForm({ producto, baseUrl }) {
                 rows={4}
                 className="border border-gray-300 rounded-lg p-3 w-full mb-6 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
             />
+            <p className="text-sm text-red-600 font-medium mb-2">
+                ⚠️ Ingresá el número completo sin puntos ni comas. <br />
+                Ejemplo: <strong>1000</strong> en lugar de <strong>1.000</strong> o <strong>1,000</strong>
+            </p>
 
             <input
                 type="number"
