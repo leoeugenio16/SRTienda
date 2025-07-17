@@ -76,105 +76,106 @@ export default function ProductosPage() {
     }
   };
 
- return (
-  <section className="pt-20 p-6 max-w-7xl mx-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
-    
-    {/* BUSCADOR Y BOTÓN DE FILTRO */}
-    <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
-      
-      {/* Input búsqueda */}
-      <input
-        type="text"
-        value={search}
-        onChange={handleSearchChange}
-        placeholder="Buscar productos..."
-        className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 w-full sm:w-auto"
-      />
+  return (
+    <section className="pt-20 p-6 max-w-7xl mx-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
 
-      {/* Botón Filtros */}
-      <button
-        onClick={() => setShowFilters(!showFilters)}
-        className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 flex items-center gap-2"
-      >
-        <Filter className="w-4 h-4" />
-        Filtros
-        <span className="text-sm">{showFilters ? "▲" : "▼"}</span>
-      </button>
-    </div>
+      {/* BUSCADOR Y BOTÓN DE FILTRO */}
+      <div className="mb-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
 
-    {/* FILTROS DESPLEGABLES */}
-    <div
-      className={`grid transition-all duration-300 ease-in-out ${
-        showFilters ? "max-h-[500px] opacity-100 scale-100" : "max-h-0 opacity-0 scale-95"
-      } overflow-hidden mb-6 gap-4 justify-center`}
-    >
-      {/* Filtro de categoría */}
-      <select
-        value={selectedCategory}
-        onChange={handleCategoryChange}
-        className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 w-full sm:w-auto"
-      >
-        <option value="">Todas las categorías</option>
-        {categorias.map((cat) => (
-          <option key={cat.id} value={cat.slug}>
-            {cat.name}
-          </option>
-        ))}
-      </select>
+        {/* Input búsqueda */}
+        <input
+          type="text"
+          value={search}
+          onChange={handleSearchChange}
+          placeholder="Buscar productos..."
+          className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 w-full sm:w-auto"
+        />
 
-      {/* Filtro de orden */}
-      <select
-        value={sort}
-        onChange={handleSortChange}
-        className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 w-full sm:w-auto"
-      >
-        <option value="createdAt:desc">Más nuevos</option>
-        <option value="price_sale:asc">Precio menor</option>
-        <option value="price_sale:desc">Precio mayor</option>
-        <option value="title:asc">Nombre A-Z</option>
-        <option value="title:desc">Nombre Z-A</option>
-      </select>
-    </div>
-
-    {/* TÍTULO */}
-    <h1 className="text-3xl font-bold mb-6 text-center">Todos los productos</h1>
-
-    {/* VACÍO */}
-    {productos.length === 0 && !loading && (
-      <p className="text-center text-gray-500">No se encontraron productos.</p>
-    )}
-
-    {/* GRILLA DE PRODUCTOS */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {productos
-          .filter((product) => !product.vendido) // solo productos no vendidos
-          .map((product) => (
-            <ProductCard
-              key={product.documentId || product.id}
-              product={product}
-            />
-          ))}
-    </div>
-    
-
-    {/* BOTÓN VER MÁS */}
-    <div className="flex justify-center mt-6">
-      {loading ? (
-        <div className="loader" />
-      ) : hasMore ? (
+        {/* Botón Filtros */}
         <button
-          onClick={handleLoadMore}
-          className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition"
+          onClick={() => setShowFilters(!showFilters)}
+          className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 flex items-center gap-2"
         >
-          Ver más
+          <Filter className="w-4 h-4" />
+          Filtros
+          <span className="text-sm">{showFilters ? "▲" : "▼"}</span>
         </button>
-      ) : (
-        <p className="text-gray-500">No hay más productos</p>
-      )}
-    </div>
+      </div>
 
-    {/* LOADER ANIMADO */}
-    <style jsx>{`
+      {/* FILTROS DESPLEGABLES */}
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${showFilters ? "max-h-[500px] opacity-100 scale-100" : "max-h-0 opacity-0 scale-95"
+          } overflow-hidden mb-6 gap-4 justify-center`}
+      >
+        {/* Filtro de categoría */}
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 w-full sm:w-auto"
+        >
+          <option value="">Todas las categorías</option>
+          {categorias.map((cat) => (
+            <option key={cat.id} value={cat.slug}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
+
+        {/* Filtro de orden */}
+        <select
+          value={sort}
+          onChange={handleSortChange}
+          className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white border border-white dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 w-full sm:w-auto"
+        >
+          <option value="createdAt:desc">Más nuevos</option>
+          <option value="price_sale:asc">Precio menor</option>
+          <option value="price_sale:desc">Precio mayor</option>
+          <option value="title:asc">Nombre A-Z</option>
+          <option value="title:desc">Nombre Z-A</option>
+        </select>
+      </div>
+
+      {/* TÍTULO */}
+      <h1 className="text-3xl font-bold mb-6 text-center">Todos los productos</h1>
+
+      {/* VACÍO */}
+      {productos.length === 0 && !loading && (
+        <p className="text-center text-gray-500">No se encontraron productos.</p>
+      )}
+
+      {/* GRILLA DE PRODUCTOS */}
+      <div className="overflow-x-auto">
+        <div className="grid grid-cols-3 gap-4 md:grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
+          {productos
+            .filter((product) => !product.vendido)
+            .map((product) => (
+              <div key={product.documentId || product.id} className="max-w-xs w-full">
+                <ProductCard product={product} />
+              </div>
+            ))}
+        </div>
+      </div>
+
+
+
+      {/* BOTÓN VER MÁS */}
+      <div className="flex justify-center mt-6">
+        {loading ? (
+          <div className="loader" />
+        ) : hasMore ? (
+          <button
+            onClick={handleLoadMore}
+            className="bg-orange-500 text-white px-6 py-2 rounded-full hover:bg-orange-600 transition"
+          >
+            Ver más
+          </button>
+        ) : (
+          <p className="text-gray-500">No hay más productos</p>
+        )}
+      </div>
+
+      {/* LOADER ANIMADO */}
+      <style jsx>{`
       .loader {
         border: 4px solid #f3f3f3;
         border-top: 4px solid #fb923c;
@@ -193,8 +194,8 @@ export default function ProductosPage() {
         }
       }
     `}</style>
-  </section>
-);
+    </section>
+  );
 
 
 
