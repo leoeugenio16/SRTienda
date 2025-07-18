@@ -43,7 +43,7 @@ export default async function Home() {
     getEventosDestacados(),
     getProviders(),
   ]);
-
+  console.log("provedoores:", proveedores);
   return (
     <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       {/* CATEGORÍAS EN CÍRCULOS */}
@@ -153,7 +153,7 @@ export default async function Home() {
             return (
               <Link
                 key={id}
-                href={`/proveedores/${slug}`}
+                href={`/vendedores/${slug}`}
                 className="flex flex-col items-center flex-shrink-0 w-24"
               >
                 <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center overflow-hidden">
