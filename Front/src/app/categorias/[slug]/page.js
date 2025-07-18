@@ -12,25 +12,24 @@ async function getSubcategoriesByCategory(slug) {
     return [];
   }
   const data = await res.json();
-  console.log("Subcategorías recibidas:", data);
   return Array.isArray(data.data) ? data.data : [];
 }
 
 async function getProductsByCategory(slug) {
-  const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[category][slug][$eq]=${slug}&populate[images][fields][0]=url&populate[provider][fields][0]=name&populate[provider][fields][1]=whatsapp&populate[provider][fields][2]=documentId`;
+  const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[category][slug][$eq]=${slug}&populate[images][fields][0]=url&populate[provider][fields][0]=name&populate[provider][fields][1]=whatsapp&populate[provider][fields][2]=documentId&populate[subcategory][fields][0]=name`;
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     console.error("Error en la consulta:", await res.text());
     return [];
   }
   const data = await res.json();
-  console.log("Productos recibidos:", data);
   return Array.isArray(data.data) ? data.data : [];
 }
 
 export default function CategoriaPage({ params }) {
-  const { slug } = use(params)
+  const { slug } = use(params);
   const [subcategorias, setSubcategorias] = useState([]);
+  const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [productos, setProductos] = useState([]);
   const { agregarProducto } = useCart();
 
@@ -40,8 +39,6 @@ export default function CategoriaPage({ params }) {
         getSubcategoriesByCategory(slug),
         getProductsByCategory(slug),
       ]);
-      console.log("Subcategorías guardadas en estado:", subs);
-      console.log("Productos guardados en estado:", prods);
       setSubcategorias(subs || []);
       setProductos(prods || []);
     }
@@ -49,7 +46,6 @@ export default function CategoriaPage({ params }) {
   }, [slug]);
 
   const agregarAlCarrito = (producto) => {
-    console.log("Producto a agregar:", producto);
     const nuevoProducto = {
       documentId: producto.documentId || producto.id,
       nombre: producto.title,
@@ -69,55 +65,49 @@ export default function CategoriaPage({ params }) {
     .replace(/-/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 
+  const productosFiltrados = selectedSubcategory
+    ? productos.filter(
+        (p) => p.subcategory?.id === parseInt(selectedSubcategory)
+      )
+    : productos;
+
   return (
     <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen">
       <section className="pt-20 p-6 max-w-6xl mx-auto text-center">
         <h1 className="text-4xl font-bold mb-6 capitalize text-orange-600">
-          Categoría: {categoriaFormateada}
+          {categoriaFormateada}
         </h1>
 
-        {/* Mostrar subcategorías en círculos */}
+        {/* FILTRO DE SUBCATEGORÍA */}
         {subcategorias.length > 0 && (
-          <div className="flex gap-4 justify-center mb-8 overflow-x-auto px-4">
-            {subcategorias.map((sub) => {
-              const { id, image, name } = sub;
-              const imageUrl = getImageUrl(image);
-              return (
-                <div
-                  key={id}
-                  className="flex flex-col items-center flex-shrink-0 w-24 cursor-pointer"
-                >
-                  <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center">
-                    {imageUrl ? (
-                      <img
-                        src={imageUrl}
-                        alt={name}
-                        className="w-10 h-10 object-contain"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full" />
-                    )}
-                  </div>
-                  <span className="mt-1 text-xs text-gray-800 dark:text-white text-center leading-tight break-words max-w-[5rem]">
-                    {name}
-                  </span>
-                </div>
-              );
-            })}
+          <div className="mb-6">
+            <select
+              value={selectedSubcategory}
+              onChange={(e) => setSelectedSubcategory(e.target.value)}
+              className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 rounded-full px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            >
+              <option value="">Todas las subcategorías</option>
+              {subcategorias.map((sub) => (
+                <option key={sub.id} value={sub.id}>
+                  {sub.name}
+                </option>
+              ))}
+            </select>
           </div>
         )}
 
-        {/* Productos */}
-        {productos.length === 0 ? (
+
+        {/* LISTADO DE PRODUCTOS */}
+        {productosFiltrados.length === 0 ? (
           <p className="text-gray-500 dark:text-gray-400 text-lg">
-            No hay productos en esta categoría.
+            No hay productos en esta subcategoría.
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {productos
+            {productosFiltrados
               .filter((product) => product && !product.vendido)
               .map((prod) => {
-                const { id, title, slug, price_sale, images, provider } = prod;
+                const { id, title, slug, price_sale, images } = prod;
                 const imageUrl = getImageUrl(images?.[0]);
 
                 return (

@@ -43,7 +43,6 @@ export default async function Home() {
     getEventosDestacados(),
     getProviders(),
   ]);
-  console.log("provedoores:", proveedores);
   return (
     <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       {/* CATEGORÍAS EN CÍRCULOS */}
