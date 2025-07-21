@@ -2,6 +2,7 @@
 
 import { useState, useEffect, use } from "react";
 import { useCart } from "../../context/CartContext";
+import { getImageUrl } from "../../../utils/getImageUrl";
 
 async function getServicioBySlug(slug) {
   const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/servicios?filters[slug][$eq]=${slug}&populate=images&populate=provider`;
@@ -11,7 +12,7 @@ async function getServicioBySlug(slug) {
 }
 
 export default function ServicioPage({ params }) {
-  const { slug } = use(params);
+  const { slug } = use(params)
   const [servicio, setServicio] = useState(null);
   const { agregarProducto } = useCart();
 
@@ -35,9 +36,7 @@ export default function ServicioPage({ params }) {
     provider,
   } = servicio;
 
-  const imagenPrincipal = images?.[0]?.url
-    ? `${process.env.NEXT_PUBLIC_STRAPI_URL}${images[0].url}`
-    : "/placeholder.jpg";
+  const imagenPrincipal = getImageUrl(images?.[0]);
 
   const handleAgregarAlCarrito = () => {
     const nuevoItem = {
@@ -63,12 +62,11 @@ export default function ServicioPage({ params }) {
           {title}
         </h1>
 
-        {/* Contenedor principal con imagen y detalles */}
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
           {/* Imagen principal */}
-          {images.length > 0 && (
+          {imagenPrincipal && (
             <img
-              src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${images[0].url}`}
+              src={imagenPrincipal}
               alt="Imagen principal"
               className="w-60 h-60 object-cover rounded shadow"
             />
@@ -93,13 +91,11 @@ export default function ServicioPage({ params }) {
           </div>
         </div>
 
-        {/* Botón centrado */}
+        {/* Botón de WhatsApp */}
         {provider?.whatsapp && (
           <div className="text-center">
             <a
-              href={`https://wa.me/${
-                provider.whatsapp
-              }?text=${encodeURIComponent(
+              href={`https://wa.me/${provider.whatsapp}?text=${encodeURIComponent(
                 `Hola! Quiero consultar por el servicio: ${title}`
               )}`}
               target="_blank"
