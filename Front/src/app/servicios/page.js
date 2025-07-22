@@ -1,8 +1,11 @@
+
+
 import Link from "next/link";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 async function getServicios() {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/servicios`,
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/servicios?populate=images`,
     {
       cache: "no-store",
     }
@@ -15,10 +18,9 @@ export default async function ServiciosPage() {
   const servicios = await getServicios();
 
   return (
-    <section className="pt-20 p-6 max-w-5xl mx-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
-      <h1 className="text-2xl font-bold mb-6 text-center">
-        Servicios disponibles
-      </h1>
+    <section className="pt-20 p-6 max-w-6xl mx-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
+      <h1 className="text-2xl font-bold mb-6 text-center">Servicios disponibles</h1>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {servicios.map((servicio) => {
           const {
@@ -28,21 +30,34 @@ export default async function ServiciosPage() {
             slug,
             descripcion,
             precio_aproximado,
+            images,
           } = servicio;
+
+          const imageUrl = getImageUrl(images?.[0]) || "/placeholder.jpg";
 
           return (
             <Link
               key={documentId}
               href={`/servicios/${slug}`}
-              className="block bg-gray dark:bg-gray-800 rounded-lg shadow hover:shadow-lg overflow-hidden transition p-4"
+              className="block bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg overflow-hidden transition"
             >
-              <h2 className="text-lg font-bold mb-1">{title}</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                {descripcion?.slice(0, 80)}...
-              </p>
-              <p className="text-sm text-orange-500 font-semibold">
-                Precio Aproximado: {precio_aproximado}
-              </p>
+              <img
+                src={imageUrl}
+                alt={title}
+                className="w-full h-48 object-cover"
+              />
+
+              <div className="p-4">
+                <h2 className="text-lg font-bold mb-1 line-clamp-2">{title}</h2>
+
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-3">
+                  {descripcion}
+                </p>
+
+                <p className="text-sm text-orange-500 font-semibold">
+                  Precio Aproximado: {precio_aproximado || "A consultar"}
+                </p>
+              </div>
             </Link>
           );
         })}
