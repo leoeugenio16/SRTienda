@@ -84,9 +84,24 @@ export default function ServicioPage({ params }) {
             </p>
 
             {provider?.name && (
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Proveedor: {provider.name}
-              </p>
+              <div className="flex items-center gap-3 mb-4">
+                {provider?.image && (
+                  <a href={`/proveedor/${provider.slug || ""}`} className="flex-shrink-0">
+                    <img
+                      src={getImageUrl(provider.image)}
+                      alt={provider.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  </a>
+                )}
+
+                <a
+                  href={`/vendedores/${provider.slug || ""}`}
+                  className="text-sm font-medium text-orange-600 hover:underline"
+                >
+                  {provider.name}
+                </a>
+              </div>
             )}
           </div>
         </div>

@@ -7,23 +7,29 @@ import { getImageUrl } from "../../../utils/getImageUrl";
 
 const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
 
-async function getProveedorYProductos(slug) {
+async function getProveedorYProductosYServicios(slug) {
   const urlProveedor = `${baseUrl}/api/providers?filters[slug][$eq]=${slug}&populate=image`;
   const resProv = await fetch(urlProveedor);
   const dataProv = await resProv.json();
   const proveedor = dataProv.data?.[0];
-
   if (!proveedor) return null;
 
   const proveedorId = proveedor.id;
 
-  const urlProductos = `${baseUrl}/api/products?filters[provider][id][$eq]=${proveedorId}&populate=images`;
+  // Productos
+  const urlProductos = `${baseUrl}/api/products?filters[provider][id][$eq]=${proveedorId}&filters[visible][$eq]=true&populate=images`;
   const resProds = await fetch(urlProductos);
   const dataProds = await resProds.json();
 
+  // Servicios
+  const urlServicios = `${baseUrl}/api/servicios?filters[provider][id][$eq]=${proveedorId}&populate=images`;
+  const resServ = await fetch(urlServicios);
+  const dataServ = await resServ.json();
+
   return {
-    proveedor: proveedor,
+    proveedor,
     productos: dataProds.data || [],
+    servicios: dataServ.data || [],
   };
 }
 
@@ -31,13 +37,15 @@ export default function ProveedorPage({ params }) {
   const { slug } = use(params);
   const [proveedor, setProveedor] = useState(null);
   const [productos, setProductos] = useState([]);
+  const [servicios, setServicios] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getProveedorYProductos(slug);
+      const data = await getProveedorYProductosYServicios(slug);
       if (data) {
         setProveedor(data.proveedor);
         setProductos(data.productos);
+        setServicios(data.servicios); // 👈 nuevo
       }
     }
     fetchData();
@@ -95,42 +103,73 @@ export default function ProveedorPage({ params }) {
         </div>
       </div>
 
-      <h2 className="text-2xl font-semibold mb-6">Productos publicados</h2>
-
-      {productos.length === 0 ? (
-        <p className="text-gray-500">Este proveedor no tiene productos.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {productos.map((prod) => {
-            const imageUrl = getImageUrl(prod.images?.[0]);
-            return (
-              <Link
-                href={`/productos/${prod.slug}`}
-                key={prod.id}
-                className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition bg-white dark:bg-gray-800"
-              >
-                <img
-                  src={imageUrl}
-                  alt={prod.title}
-                  className="w-full h-[400px] object-contain bg-white rounded-xl shadow-lg"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-orange-600">
-                    {prod.title}
-                  </h3>
-                  <p className="text-gray-700 dark:text-gray-300 text-sm mb-1">
-                    ${prod.price_sale?.toLocaleString() || "Consultar"}
-                  </p>
-                  {prod.vendido && (
-                    <p className="text-sm font-semibold text-red-600">
-                      Vendido
+      {productos.length > 0 ? (
+        <>
+          <h2 className="text-2xl font-semibold mb-6">Productos publicados</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {productos.map((prod) => {
+              const imageUrl = getImageUrl(prod.images?.[0]);
+              return (
+                <Link
+                  href={`/productos/${prod.slug}`}
+                  key={prod.id}
+                  className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition bg-white dark:bg-gray-800"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={prod.title}
+                    className="w-full h-[400px] object-contain bg-white rounded-xl shadow-lg"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-orange-600">
+                      {prod.title}
+                    </h3>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm mb-1">
+                      ${prod.price_sale?.toLocaleString() || "Consultar"}
                     </p>
-                  )}
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+                    {prod.vendido && (
+                      <p className="text-sm font-semibold text-red-600">Vendido</p>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </>
+      ) : servicios.length > 0 ? (
+        <>
+          <h2 className="text-2xl font-semibold mb-6">Servicios ofrecidos</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {servicios.map((serv) => {
+              const imageUrl = getImageUrl(serv.images?.[0]);
+              return (
+                <Link
+                  href={`/servicios/${serv.slug}`}
+                  key={serv.id}
+                  className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition bg-white dark:bg-gray-800"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={serv.title}
+                    className="w-full h-[300px] object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-orange-600">
+                      {serv.title}
+                    </h3>
+                    <p className="text-gray-700 dark:text-gray-300 text-sm mb-1">
+                      Precio aprox.: {serv.precio_aproximado || "Consultar"}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <p className="text-gray-500 text-center">
+          Este proveedor aún no tiene productos ni servicios publicados.
+        </p>
       )}
     </section>
   );
