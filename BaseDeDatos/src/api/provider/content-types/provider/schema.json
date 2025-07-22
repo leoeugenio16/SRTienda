@@ -20,7 +20,7 @@
     "instagram": {
       "type": "string"
     },
-    "terms": {
+    "facebook": {
       "type": "string"
     },
     "slug": {

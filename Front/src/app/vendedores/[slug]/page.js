@@ -2,7 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { Instagram, Phone } from "lucide-react";
+import { Instagram, Phone, Facebook } from "lucide-react";
 import { getImageUrl } from "../../../utils/getImageUrl";
 
 const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
@@ -54,7 +54,7 @@ export default function ProveedorPage({ params }) {
   if (!proveedor)
     return <div className="p-6 text-center">Proveedor no encontrado</div>;
 
-  const { name, image, sobreNosotros, instagram, whatsapp } =
+  const { name, image, sobreNosotros, instagram, facebook, whatsapp } =
     proveedor.attributes || proveedor;
 
   const imageUrl = getImageUrl(
@@ -86,6 +86,17 @@ export default function ProveedorPage({ params }) {
                 title="Instagram"
               >
                 <Instagram className="w-6 h-6" />
+              </a>
+            )}
+            {facebook && (
+              <a
+                href={facebook.startsWith("http") ? facebook : `https://facebook.com/${facebook}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-blue-100 dark:bg-blue-800 text-blue-600 dark:text-blue-200 p-3 rounded-full shadow-lg hover:scale-110 transition-all"
+                title="Facebook"
+              >
+                <Facebook className="w-6 h-6" />
               </a>
             )}
             {whatsapp && (

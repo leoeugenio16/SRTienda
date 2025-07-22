@@ -610,6 +610,7 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     eventos: Schema.Attribute.Relation<'oneToMany', 'api::evento.evento'>;
+    facebook: Schema.Attribute.String;
     image: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true
@@ -627,7 +628,6 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
     servicios: Schema.Attribute.Relation<'oneToMany', 'api::servicio.servicio'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     sobreNosotros: Schema.Attribute.Text;
-    terms: Schema.Attribute.String;
     tipo: Schema.Attribute.Enumeration<['Particular', 'Comercio', 'Servicio']>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
