@@ -4,7 +4,8 @@
   "info": {
     "singularName": "servicio",
     "pluralName": "servicios",
-    "displayName": "Servicio"
+    "displayName": "Servicio",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -22,14 +23,15 @@
       "type": "text"
     },
     "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
     "provider": {
       "type": "relation",
@@ -39,6 +41,10 @@
     },
     "precio_aproximado": {
       "type": "string"
+    },
+    "destacado": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

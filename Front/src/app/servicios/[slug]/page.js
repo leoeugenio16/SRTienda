@@ -74,9 +74,10 @@ export default function ServicioPage({ params }) {
 
           {/* Info a la derecha */}
           <div className="flex-1">
-            <p className="mb-4 text-lg leading-relaxed break-words">
+            <p className="mb-4 text-lg leading-relaxed break-words whitespace-pre-line">
               {descripcion}
             </p>
+
 
             <p className="text-gray-700 dark:text-gray-300 mb-2">
               <strong>Precio aproximado:</strong>{" "}

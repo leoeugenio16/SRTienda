@@ -372,6 +372,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiBannerBanner extends Struct.CollectionTypeSchema {
   collectionName: 'banners';
   info: {
+    description: '';
     displayName: 'banner';
     pluralName: 'banners';
     singularName: 'banner';
@@ -387,6 +388,7 @@ export interface ApiBannerBanner extends Struct.CollectionTypeSchema {
     desktopImage: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios'
     >;
+    destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     link: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -643,6 +645,7 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
 export interface ApiServicioServicio extends Struct.CollectionTypeSchema {
   collectionName: 'servicios';
   info: {
+    description: '';
     displayName: 'Servicio';
     pluralName: 'servicios';
     singularName: 'servicio';
@@ -655,6 +658,7 @@ export interface ApiServicioServicio extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     descripcion: Schema.Attribute.Text;
+    destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     images: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true

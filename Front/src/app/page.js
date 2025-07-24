@@ -35,12 +35,21 @@ async function getProviders() {
   const data = await res.json();
   return data.data;
 }
+async function getServiciosDestacados() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/servicios?filters[destacado][$eq]=true&populate=images`,
+    { cache: "no-store" }
+  );
+  const data = await res.json();
+  return data.data;
+}
 
 export default async function Home() {
-  const [categorias, productosDestacados, eventosDestacados, proveedores] = await Promise.all([
+  const [categorias, productosDestacados, eventosDestacados,serviciosDestacados, proveedores] = await Promise.all([
     getCategorias(),
     getDestacados(),
     getEventosDestacados(),
+    getServiciosDestacados(),
     getProviders(),
   ]);
   return (
@@ -133,6 +142,38 @@ export default async function Home() {
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       {new Date(start_date).toLocaleDateString()}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+      {/* Servicios destacados */}
+      {serviciosDestacados.length > 0 && (
+        <section className="p-4">
+          <h2 className="text-2xl font-semibold mb-4 text-center">Servicios Destacados</h2>
+          <div className="flex gap-6 overflow-x-auto px-4 justify-center">
+            {serviciosDestacados.map((servicio) => {
+              const { id, title, slug, precio_aproximado, images } = servicio;
+              const imageUrl = getImageUrl(images?.[0]);
+
+              return (
+                <Link
+                  href={`/servicios/${slug}`}
+                  key={id}
+                  className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={title}
+                    className="w-full h-40 object-cover rounded-t-xl"
+                  />
+                  <div className="p-3">
+                    <h3 className="text-sm font-semibold">{title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      Precio aprox.: {precio_aproximado || "Consultar"}
                     </p>
                   </div>
                 </Link>

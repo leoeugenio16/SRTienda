@@ -170,7 +170,8 @@ export default function ProductPage({ params }) {
           <p className="text-2xl text-gray-700 font-semibold mb-4">
             ${price_sale.toLocaleString()}
           </p>
-          <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
+          <p className="text-gray-600 mb-6 leading-relaxed whitespace-pre-line">{description}</p>
+
 
           {/* Botón WhatsApp */}
           <a
