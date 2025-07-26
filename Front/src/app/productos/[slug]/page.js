@@ -5,13 +5,14 @@ import { useCart } from "../../context/CartContext";
 import { getImageUrl } from "../../../utils/getImageUrl";
 
 async function getProductBySlug(slug) {
-  const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[slug][$eq]=${slug}&populate[images][fields][0]=url&populate[provider][fields][0]=name&populate[provider][fields][1]=whatsapp&populate[provider][fields][2]=documentId`;
+  const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/products?filters[slug][$eq]=${slug}&populate[images][fields][0]=url&populate[provider][fields][0]=name&populate[provider][fields][1]=whatsapp&populate[provider][fields][2]=documentId&populate[provider][fields][3]=slug&populate[provider][populate][0]=image`;
 
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     console.error("Error en la consulta producto:", await res.text());
     return null;
   }
+
   const data = await res.json();
   return data.data?.[0] || null;
 }
@@ -73,7 +74,9 @@ export default function ProductPage({ params }) {
 
     // Actualizo carrito local
     const carritoActual = JSON.parse(localStorage.getItem("carrito")) || [];
-    const yaExiste = carritoActual.find((p) => p.documentId === nuevoProducto.documentId);
+    const yaExiste = carritoActual.find(
+      (p) => p.documentId === nuevoProducto.documentId
+    );
 
     let nuevoCarrito;
     if (yaExiste) {
@@ -156,8 +159,9 @@ export default function ProductPage({ params }) {
                   src={url}
                   alt={`Miniatura ${idx + 1}`}
                   onClick={() => setSelectedImage(url)}
-                  className={`h-20 w-20 object-cover cursor-pointer border rounded-lg hover:scale-105 transition-all duration-200 ${selectedImage === url ? "ring-2 ring-orange-500" : ""
-                    }`}
+                  className={`h-20 w-20 object-cover cursor-pointer border rounded-lg hover:scale-105 transition-all duration-200 ${
+                    selectedImage === url ? "ring-2 ring-orange-500" : ""
+                  }`}
                 />
               );
             })}
@@ -170,12 +174,38 @@ export default function ProductPage({ params }) {
           <p className="text-2xl text-gray-700 font-semibold mb-4">
             ${price_sale.toLocaleString()}
           </p>
-          <p className="text-gray-600 mb-6 leading-relaxed whitespace-pre-line">{description}</p>
-
+          <p className="text-gray-600 mb-6 leading-relaxed whitespace-pre-line">
+            {description}
+          </p>
+          {/* Info del proveedor */}
+          {provider?.name && (
+            <div className="flex items-center gap-3 mb-4">
+              {provider?.image && (
+                <a
+                  href={`/proveedor/${provider.slug || ""}`}
+                  className="flex-shrink-0"
+                >
+                  <img
+                    src={getImageUrl(provider.image?.[0])}
+                    alt={provider.name}
+                    className="w-10 h-10 rounded-full object-cover"
+                  />
+                </a>
+              )}
+              <a
+                href={`/vendedores/${provider.slug || ""}`}
+                className="text-sm font-medium text-orange-600 hover:underline"
+              >
+                {provider.name}
+              </a>
+            </div>
+          )}
 
           {/* Botón WhatsApp */}
           <a
-            href={`https://wa.me/${provider?.whatsapp || "5492625500165"}?text=${encodeURIComponent(
+            href={`https://wa.me/${
+              provider?.whatsapp || "5492625500165"
+            }?text=${encodeURIComponent(
               `Hola! Quiero comprar el producto: ${title}`
             )}`}
             target="_blank"
@@ -218,5 +248,4 @@ export default function ProductPage({ params }) {
       </div>
     </section>
   );
-
 }
