@@ -45,7 +45,13 @@ async function getServiciosDestacados() {
 }
 
 export default async function Home() {
-  const [categorias, productosDestacados, eventosDestacados,serviciosDestacados, proveedores] = await Promise.all([
+  const [
+    categorias,
+    productosDestacados,
+    eventosDestacados,
+    serviciosDestacados,
+    proveedores,
+  ] = await Promise.all([
     getCategorias(),
     getDestacados(),
     getEventosDestacados(),
@@ -86,7 +92,9 @@ export default async function Home() {
 
       {/* PRODUCTOS DESTACADOS */}
       <section className="p-4">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Productos Destacados</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-center">
+          Productos Destacados
+        </h2>
         <div className="flex gap-6 overflow-x-auto px-4 justify-center">
           {productosDestacados.map((prod) => {
             const { id, title, slug, price_sale, images } = prod;
@@ -113,15 +121,26 @@ export default async function Home() {
             );
           })}
         </div>
+        <div className="mt-6 text-center">
+          <Link
+            href="/productos"
+            className="inline-block bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 px-6 py-2 rounded-xl shadow-sm hover:shadow-md transition"
+          >
+            Ver todos
+          </Link>
+        </div>
       </section>
 
       {/* EVENTOS DESTACADOS */}
       {eventosDestacados.length > 0 && (
         <section className="p-4">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Eventos Destacados</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Eventos Destacados
+          </h2>
           <div className="flex gap-6 overflow-x-auto px-4 justify-center">
             {eventosDestacados.map((evento) => {
-              const { id, title, slug, price_sale, start_date, images } = evento;
+              const { id, title, slug, price_sale, start_date, images } =
+                evento;
               const imageUrl = getImageUrl(images?.[0]);
 
               return (
@@ -148,12 +167,22 @@ export default async function Home() {
               );
             })}
           </div>
+          <div className="mt-6 text-center">
+            <Link
+              href="/productos"
+              className="inline-block bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 px-6 py-2 rounded-xl shadow-sm hover:shadow-md transition"
+            >
+              Ver todos
+            </Link>
+          </div>
         </section>
       )}
       {/* Servicios destacados */}
       {serviciosDestacados.length > 0 && (
         <section className="p-4">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Servicios Destacados</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center">
+            Servicios Destacados
+          </h2>
           <div className="flex gap-6 overflow-x-auto px-4 justify-center">
             {serviciosDestacados.map((servicio) => {
               const { id, title, slug, precio_aproximado, images } = servicio;
@@ -180,12 +209,22 @@ export default async function Home() {
               );
             })}
           </div>
+          <div className="mt-6 text-center">
+            <Link
+              href="/servicios"
+              className="inline-block bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 px-6 py-2 rounded-xl shadow-sm hover:shadow-md transition"
+            >
+              Ver todos
+            </Link>
+          </div>
         </section>
       )}
 
       {/* PROVEEDORES */}
       <section className="p-6">
-        <h2 className="text-2xl font-semibold mb-4 text-center">Nuestros Proveedores</h2>
+        <h2 className="text-2xl font-semibold mb-4 text-center">
+          Nuestros Proveedores
+        </h2>
         <div className="flex gap-6 overflow-x-auto px-4 justify-center">
           {proveedores.map(({ id, name, slug, image }) => {
             const imageUrl = getImageUrl(image?.[0]);
@@ -216,7 +255,9 @@ export default async function Home() {
             );
           })}
           {proveedores.length === 0 && (
-            <p className="text-center text-gray-500 dark:text-gray-400">No hay proveedores para mostrar.</p>
+            <p className="text-center text-gray-500 dark:text-gray-400">
+              No hay proveedores para mostrar.
+            </p>
           )}
         </div>
       </section>

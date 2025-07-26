@@ -124,13 +124,13 @@ export default function Navbar() {
               <FolderOpen className="w-5 h-5" />
               Categorías
             </Link>
-            <Link
+            {/* <Link
               href="/productos"
               className="flex items-center gap-1 hover:text-orange-700 transition"
             >
               <Boxes className="w-5 h-5" />
               Productos
-            </Link>
+            </Link> */}
             <Link
               href="/servicios"
               className="flex items-center gap-1 hover:text-orange-700 transition"
