@@ -12,6 +12,7 @@ import {
   User,
   Clock1,
   Wrench,
+  Phone,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -138,19 +139,19 @@ export default function Navbar() {
               Servicios
             </Link>
 
-            <Link
+            {/* <Link
               href="/particulares"
               className="flex items-center gap-1 hover:text-orange-700 transition"
             >
               <Clock1 className="w-5 h-5" />
               Ventas Unicas
-            </Link>
+            </Link> */}
             <Link
               href="/vendedores"
               className="flex items-center gap-1 hover:text-orange-700 transition"
             >
               <User className="w-5 h-5" />
-              vendedores
+              Vendedores
             </Link>
             <Link
               href="/eventos"
@@ -158,6 +159,13 @@ export default function Navbar() {
             >
               <CalendarDays className="w-5 h-5" />
               Eventos
+            </Link>
+            <Link
+              href="/contacto"
+              className="flex items-center gap-1 hover:text-orange-700 transition"
+            >
+              <Phone className="w-5 h-5" />
+              Contactanos
             </Link>
 
             <Link
@@ -329,6 +337,13 @@ export default function Navbar() {
             >
               <CalendarDays className="w-5 h-5" />
               Eventos
+            </Link>
+            <Link
+              href="/contacto"
+              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            >
+              <Phone className="w-5 h-5" />
+              Contactanos
             </Link>
             <Link
               href="/carrito"
