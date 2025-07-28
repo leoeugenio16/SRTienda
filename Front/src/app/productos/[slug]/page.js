@@ -28,6 +28,8 @@ export default function ProductPage({ params }) {
   // Imagen seleccionada para mostrar
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const [mostrarModalInsignia, setMostrarModalInsignia] = useState(false);
+
   useEffect(() => {
     async function fetchProducto() {
       const prod = await getProductBySlug(slug);
@@ -144,11 +146,51 @@ export default function ProductPage({ params }) {
       <div className="grid md:grid-cols-2 gap-8">
         {/* Imagen + miniaturas */}
         <div className="flex flex-col gap-4">
-          <img
-            src={selectedImage}
-            alt={title}
-            className="w-full h-[400px] object-contain bg-white rounded-xl shadow-lg"
-          />
+          <div className="relative w-full h-[400px]">
+            <img
+              src={selectedImage}
+              alt={title}
+              className="w-full h-full object-contain bg-white rounded-xl shadow-lg"
+            />
+
+            {producto.venta_segura && (
+              <>
+                <div
+                  className="absolute top-2 right-2 w-10 h-10 rounded-md bg-white border border-gray-300 shadow-md flex items-center justify-center cursor-pointer"
+                  onClick={() => setMostrarModalInsignia(true)}
+                >
+                  <img src="/insignia.png" alt="Insignia" className="w-6 h-6" />
+                </div>
+
+                {mostrarModalInsignia && (
+                  <div className="fixed inset-0 z-50 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-xl border border-orange-500 max-w-md w-full text-center">
+                      <h2 className="text-2xl font-bold text-orange-600 mb-4">
+                        🔒 ¿Qué es la Venta Segura?
+                      </h2>
+                      <p className="text-gray-700 dark:text-gray-300 mb-6">
+                        Es un sistema donde el comprador transfiere el dinero a
+                        nuestra plataforma antes del encuentro. Una vez que
+                        ambas partes confirman la entrega, liberamos el pago al
+                        vendedor.
+                        <br />
+                        <br />
+                        No garantizamos los productos ni servicios. Solo
+                        gestionamos el dinero para que no necesites llevar
+                        efectivo ni hacer transferencias presenciales.
+                      </p>
+                      <button
+                        onClick={() => setMostrarModalInsignia(false)}
+                        className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 py-2 rounded-full transition"
+                      >
+                        Entendido
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
           <div className="flex gap-4 overflow-x-auto">
             {images.map((img, idx) => {
@@ -168,7 +210,7 @@ export default function ProductPage({ params }) {
           </div>
         </div>
 
-        {/* Info */}
+        {/* Info del producto */}
         <div>
           <h1 className="text-4xl font-bold text-orange-600 mb-2">{title}</h1>
           <p className="text-2xl text-gray-700 font-semibold mb-4">
@@ -177,6 +219,7 @@ export default function ProductPage({ params }) {
           <p className="text-gray-600 mb-6 leading-relaxed whitespace-pre-line">
             {description}
           </p>
+
           {/* Info del proveedor */}
           {provider?.name && (
             <div className="flex items-center gap-3 mb-4">
@@ -246,6 +289,16 @@ export default function ProductPage({ params }) {
           </button>
         </div>
       </div>
+      {producto.venta_segura && (
+        <div className="mt-2 text-center">
+          <a
+            href="/insignia"
+            className="text-sm text-orange-600 hover:underline"
+          >
+            ¿Qué significa venta segura?
+          </a>
+        </div>
+      )}
     </section>
   );
 }

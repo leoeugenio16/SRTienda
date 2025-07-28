@@ -592,6 +592,7 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     vendido: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    venta_segura: Schema.Attribute.Boolean;
     visible: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
   };
 }

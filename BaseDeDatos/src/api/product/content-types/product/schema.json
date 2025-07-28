@@ -72,6 +72,9 @@
       "relation": "manyToOne",
       "target": "api::subcategory.subcategory",
       "inversedBy": "products"
+    },
+    "venta_segura": {
+      "type": "boolean"
     }
   }
 }
