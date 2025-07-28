@@ -169,7 +169,7 @@ export default async function Home() {
           </div>
           <div className="mt-6 text-center">
             <Link
-              href="/productos"
+              href="/eventos"
               className="inline-block bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-600 px-6 py-2 rounded-xl shadow-sm hover:shadow-md transition"
             >
               Ver todos
