@@ -71,7 +71,7 @@ export default function ProveedorPage({ params }) {
         />
         <h1 className="text-3xl font-bold text-orange-600">{name}</h1>
         {sobreNosotros && (
-          <p className="mt-2 text-gray-700 dark:text-gray-300 max-w-xl">
+          <p className="mb-4 text-lg leading-relaxed break-words whitespace-pre-line">
             {sobreNosotros}
           </p>
         )}
