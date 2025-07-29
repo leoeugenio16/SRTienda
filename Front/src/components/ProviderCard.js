@@ -30,7 +30,7 @@ export default function ProviderCard({ provider }) {
       </Link>
 
       <div className="p-4">
-        <h2 className="text-lg font-semibold mb-2 text-center">{name}</h2>
+        <h2 className="text-lg font-semibold mb-2 text-center text-orange-600">{name}</h2>
 
         {sobreNosotros && (
           <p className="text-sm text-gray-700 text-center mb-3">
