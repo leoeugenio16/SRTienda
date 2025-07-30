@@ -79,13 +79,27 @@ export default function Navbar() {
   }, []);
 
   // Carrusel automático
+  // Carrusel automático
   useEffect(() => {
     if (banners.length === 0) return;
+
     intervalRef.current = setInterval(() => {
       setBannerIndex((prev) => (prev + 1) % banners.length);
     }, 5000);
+
     return () => clearInterval(intervalRef.current);
   }, [banners]);
+
+  const goToPrevious = () => {
+    setBannerIndex((prev) =>
+      prev === 0 ? banners.length - 1 : prev - 1
+    );
+  };
+  const goToNext = () => {
+    setBannerIndex((prev) => (prev + 1) % banners.length);
+  };
+
+  const currentBanner = banners[bannerIndex];
 
   const cerrarSesion = () => {
     localStorage.removeItem("user");
@@ -361,31 +375,49 @@ export default function Navbar() {
 
       {/* Banner debajo del navbar */}
       <div
-        className="w-full z-40 overflow-hidden"
+        className="w-full z-40 overflow-hidden relative"
         style={{ marginTop: 64, height: 192 }}
       >
-        {banners && banners.length > 0 && (
+        {banners.length > 0 && (
           <a
-            href={banners[bannerIndex]?.link || "#"}
+            href={currentBanner?.link || "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="block w-full h-full"
           >
             {(isMobile
-              ? banners[bannerIndex]?.mobileImage
-              : banners[bannerIndex]?.desktopImage) && (
+              ? currentBanner?.mobileImage
+              : currentBanner?.desktopImage) && (
                 <img
                   src={
                     isMobile
-                      ? banners[bannerIndex].mobileImage
-                      : banners[bannerIndex].desktopImage
+                      ? currentBanner.mobileImage
+                      : currentBanner.desktopImage
                   }
-                  alt={banners[bannerIndex]?.name || "Banner"}
-                  className="w-full h-full object-cover transition-opacity duration-1000"
+                  alt={currentBanner?.name || "Banner"}
+                  className="w-full h-full object-cover transition-opacity duration-1000 rounded-xl"
                   loading="lazy"
                 />
               )}
           </a>
+        )}
+
+        {/* Controles de navegación */}
+        {banners.length > 1 && (
+          <>
+            <button
+              onClick={goToPrevious}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 text-white rounded-full p-2 hover:bg-opacity-50 transition"
+            >
+              ◀
+            </button>
+            <button
+              onClick={goToNext}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 text-white rounded-full p-2 hover:bg-opacity-50 transition"
+            >
+              ▶
+            </button>
+          </>
         )}
       </div>
     </>

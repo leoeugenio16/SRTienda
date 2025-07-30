@@ -61,8 +61,8 @@ export default async function Home() {
   return (
     <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       {/* CATEGORÍAS EN CÍRCULOS */}
-      <section className="p-6 text-center">
-        <h2 className="text-2xl font-semibold mb-4">Categorías</h2>
+      <section className="p-6 text-center bg-gray-100 dark:bg-gray-900">
+        <h2 className="text-2xl font-semibold mb-4 text-orange-600">Categorías</h2>
         <div className="flex gap-6 overflow-x-auto px-4 justify-center">
           {categorias.map((cat) => {
             const { id, name, slug, image } = cat;
@@ -91,8 +91,8 @@ export default async function Home() {
       </section>
 
       {/* PRODUCTOS DESTACADOS */}
-      <section className="p-4">
-        <h2 className="text-2xl font-semibold mb-4 text-center">
+      <section className="p-4 bg-gray-200 dark:bg-gray-900">
+        <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
           Productos Destacados
         </h2>
         <div className="flex gap-6 overflow-x-auto px-4 justify-center">
@@ -133,8 +133,8 @@ export default async function Home() {
 
       {/* EVENTOS DESTACADOS */}
       {eventosDestacados.length > 0 && (
-        <section className="p-4">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
+        <section className="p-4 bg-gray-100 dark:bg-gray-900">
+          <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
             Eventos Destacados
           </h2>
           <div className="flex gap-6 overflow-x-auto px-4 justify-center">
@@ -179,8 +179,8 @@ export default async function Home() {
       )}
       {/* Servicios destacados */}
       {serviciosDestacados.length > 0 && (
-        <section className="p-4">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
+        <section className="p-4 bg-gray-200 dark:bg-gray-900">
+          <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
             Servicios Destacados
           </h2>
           <div className="flex gap-6 overflow-x-auto px-4 justify-center">
@@ -221,8 +221,8 @@ export default async function Home() {
       )}
 
       {/* PROVEEDORES */}
-      <section className="p-6">
-        <h2 className="text-2xl font-semibold mb-4 text-center">
+      <section className="p-6 bg-gray-100 dark:bg-gray-900">
+        <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
           Nuestros Proveedores
         </h2>
         <div className="flex gap-6 overflow-x-auto px-4 justify-center">

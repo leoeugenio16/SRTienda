@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./navbar/page.js";
 import { UserProvider } from "./context/UserContext";
 import { CartProvider } from "./context/CartContext";
+import Footer from "../components/Footer.js";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,9 +28,10 @@ export default function RootLayout({ children }) {
       >
         <UserProvider>
           <CartProvider>
-        <Navbar />
-        {children}
-        </CartProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </CartProvider>
         </UserProvider>
 
       </body>
