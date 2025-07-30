@@ -44,11 +44,11 @@ export default function CrearProductoPage() {
           return;
         }
 
-        const proveedorId = proveedor.id;
+        const proveedorId = proveedor.documentId;
         setProveedorId(proveedorId);
 
         return fetch(
-          `${baseUrl}/api/products?filters[provider][id][$eq]=${proveedorId}`,
+          `${baseUrl}/api/products?filters[provider][documentId][$eq]=${proveedorId}`,
           {
             headers: {
               Authorization: `Bearer ${storedToken}`,

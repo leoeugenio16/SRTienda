@@ -2,7 +2,6 @@
 "use client";
 import { getImageUrl } from "../../../../utils/getImageUrl";
 import { useState, useRef } from "react";
-import { v4 as uuidv4 } from "uuid";
 
 export default function CrearProductoForm({
   baseUrl,
@@ -19,7 +18,6 @@ export default function CrearProductoForm({
   const [images, setImages] = useState([]);
   const [uploading, setUploading] = useState(false);
 
-  const fileInputRefs = useRef({});
 
   /* ---------- helpers imágenes ---------- */
   async function subirArchivos(files) {
@@ -92,9 +90,6 @@ export default function CrearProductoForm({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
-
-    /* 1. Crear documentoId para el nuevo producto */
-    const documentId = uuidv4();
 
     /* 2. Publicar producto */
     const slug = await generarSlugUnico(title);
