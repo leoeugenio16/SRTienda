@@ -372,54 +372,10 @@ export default function Navbar() {
           </div>
         )}
       </header>
+      <div className="h-16" />
 
       {/* Banner debajo del navbar */}
-      <div
-        className="w-full z-40 overflow-hidden relative"
-        style={{ marginTop: 64, height: 192 }}
-      >
-        {banners.length > 0 && (
-          <a
-            href={currentBanner?.link || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full h-full"
-          >
-            {(isMobile
-              ? currentBanner?.mobileImage
-              : currentBanner?.desktopImage) && (
-                <img
-                  src={
-                    isMobile
-                      ? currentBanner.mobileImage
-                      : currentBanner.desktopImage
-                  }
-                  alt={currentBanner?.name || "Banner"}
-                  className="w-full h-full object-cover transition-opacity duration-1000 rounded-xl"
-                  loading="lazy"
-                />
-              )}
-          </a>
-        )}
-
-        {/* Controles de navegación */}
-        {banners.length > 1 && (
-          <>
-            <button
-              onClick={goToPrevious}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 text-white rounded-full p-2 hover:bg-opacity-50 transition"
-            >
-              ◀
-            </button>
-            <button
-              onClick={goToNext}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 text-white rounded-full p-2 hover:bg-opacity-50 transition"
-            >
-              ▶
-            </button>
-          </>
-        )}
-      </div>
+      
     </>
   );
 }

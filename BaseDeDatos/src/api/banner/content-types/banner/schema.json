@@ -48,6 +48,17 @@
     "destacado": {
       "type": "boolean",
       "default": false
+    },
+    "position": {
+      "type": "enumeration",
+      "enum": [
+        "top",
+        "categorias",
+        "productos",
+        "eventos",
+        "servicios",
+        "proveedores"
+      ]
     }
   }
 }

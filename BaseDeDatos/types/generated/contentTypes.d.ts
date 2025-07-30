@@ -402,6 +402,9 @@ export interface ApiBannerBanner extends Struct.CollectionTypeSchema {
     >;
     name: Schema.Attribute.String;
     order: Schema.Attribute.Integer;
+    position: Schema.Attribute.Enumeration<
+      ['top', 'categorias', 'productos', 'eventos', 'servicios', 'proveedores']
+    >;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
