@@ -26,7 +26,6 @@ export const CartProvider = ({ children, usuario }) => {
           if (data.data.length > 0) {
             const cartData = data.data[0];
             const items = JSON.parse(cartData.attributes.items_json || "[]");
-            console.log("Carrito cargado desde Strapi:", items);
             setCarrito(items);
             setCarritoId(cartData.id);
             localStorage.setItem("carrito", JSON.stringify(items));
@@ -34,7 +33,6 @@ export const CartProvider = ({ children, usuario }) => {
           } else {
             const local = localStorage.getItem("carrito");
             const items = local ? JSON.parse(local) : [];
-            console.log("Carrito cargado desde localStorage:", items);
             setCarrito(items);
             setCarritoId(null);
           }
@@ -42,14 +40,12 @@ export const CartProvider = ({ children, usuario }) => {
           console.error("Error cargando carrito Strapi:", error);
           const local = localStorage.getItem("carrito");
           const items = local ? JSON.parse(local) : [];
-          console.log("Carrito cargado desde localStorage (error):", items);
           setCarrito(items);
           setCarritoId(null);
         }
       } else {
         const local = localStorage.getItem("carrito");
         const items = local ? JSON.parse(local) : [];
-        console.log("Carrito cargado desde localStorage (sin token):", items);
         setCarrito(items);
         setCarritoId(localStorage.getItem("carritoId") || null);
       }
@@ -71,7 +67,6 @@ export const CartProvider = ({ children, usuario }) => {
       if (res.ok) {
         setCarritoId(data.data.id);
         localStorage.setItem("carritoId", data.data.id);
-        console.log("Carrito creado en Strapi:", data.data.id);
       } else {
         console.warn("Error creando carrito:", data);
       }
@@ -132,7 +127,6 @@ export const CartProvider = ({ children, usuario }) => {
       nuevoCarrito = [...carrito, { ...producto, cantidad: 1 }];
     }
 
-    console.log("Nuevo carrito después de agregar:", nuevoCarrito);
     setCarrito(nuevoCarrito);
     localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
     await guardarCarritoEnStrapi(nuevoCarrito);
@@ -163,7 +157,6 @@ export const CartProvider = ({ children, usuario }) => {
 
   const eliminarProducto = async (documentId) => {
     const nuevoCarrito = carrito.filter((p) => p.documentId !== documentId);
-    console.log("Nuevo carrito después de eliminar:", nuevoCarrito);
     setCarrito(nuevoCarrito);
     localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
     await guardarCarritoEnStrapi(nuevoCarrito);

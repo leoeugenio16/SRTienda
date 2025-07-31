@@ -369,6 +369,49 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAvisosComunitarioAvisosComunitario
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'avisos_comunitarios';
+  info: {
+    description: '';
+    displayName: 'avisos-comunitario';
+    pluralName: 'avisos-comunitarios';
+    singularName: 'avisos-comunitario';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.Text;
+    estado: Schema.Attribute.Enumeration<['Perdido', 'Encontrado', 'Anuncio']>;
+    imagenes: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    link_pagina: Schema.Attribute.String;
+    link_whatsapp: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::avisos-comunitario.avisos-comunitario'
+    > &
+      Schema.Attribute.Private;
+    publicado_por: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::provider.provider'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'titulo'> & Schema.Attribute.Required;
+    titulo: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiBannerBanner extends Struct.CollectionTypeSchema {
   collectionName: 'banners';
   info: {
@@ -1231,6 +1274,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::avisos-comunitario.avisos-comunitario': ApiAvisosComunitarioAvisosComunitario;
       'api::banner.banner': ApiBannerBanner;
       'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;

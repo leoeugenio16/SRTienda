@@ -1,0 +1,56 @@
+{
+  "kind": "collectionType",
+  "collectionName": "avisos_comunitarios",
+  "info": {
+    "singularName": "avisos-comunitario",
+    "pluralName": "avisos-comunitarios",
+    "displayName": "avisos-comunitario",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "titulo": {
+      "type": "string"
+    },
+    "descripcion": {
+      "type": "text"
+    },
+    "imagenes": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "link_whatsapp": {
+      "type": "string"
+    },
+    "link_pagina": {
+      "type": "string"
+    },
+    "publicado_por": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::provider.provider"
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "Perdido",
+        "Encontrado",
+        "Anuncio"
+      ]
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo",
+      "required": true
+    }
+  }
+}

@@ -113,34 +113,36 @@ export default async function Home() {
       {/* CATEGORÍAS EN CÍRCULOS */}
       <section className="px-2 sm:px-6 text-center bg-gray-100 dark:bg-gray-900">
         <h2 className="text-2xl font-semibold mb-4 text-orange-600">Categorías</h2>
-        <div className="flex gap-6 overflow-x-auto justify-start scroll-snap-x snap-mandatory px-0">
-          {categorias.map((cat, index) => {
-            const { id, name, slug, image } = cat;
-            const imageUrl = getImageUrl(image);
+        <div className="flex justify-center">
+          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory px-4">
+            {categorias.map((cat, index) => {
+              const { id, name, slug, image } = cat;
+              const imageUrl = getImageUrl(image);
 
-            const isFirst = index === 0;
-            const isLast = index === categorias.length - 1;
+              const isFirst = index === 0;
+              const isLast = index === categorias.length - 1;
 
-            return (
-              <Link
-                key={id}
-                href={`/categorias/${slug}`}
-                className={`flex flex-col items-center flex-shrink-0 w-24 snap-start ${isFirst ? "ml-4" : isLast ? "mr-4" : ""
-                  }`}
-              >
-                <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center">
-                  <img
-                    src={imageUrl}
-                    alt={name}
-                    className="w-10 h-10 object-contain"
-                  />
-                </div>
-                <span className="mt-1 text-xs text-gray-800 dark:text-white text-center leading-tight break-words max-w-[5rem]">
-                  {name}
-                </span>
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={id}
+                  href={`/categorias/${slug}`}
+                  className={`flex flex-col items-center flex-shrink-0 w-24 snap-start ${isFirst ? "ml-4" : isLast ? "mr-4" : ""
+                    }`}
+                >
+                  <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center">
+                    <img
+                      src={imageUrl}
+                      alt={name}
+                      className="w-10 h-10 object-contain"
+                    />
+                  </div>
+                  <span className="mt-1 text-xs text-gray-800 dark:text-white text-center leading-tight break-words max-w-[5rem]">
+                    {name}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </section>
 
@@ -155,8 +157,8 @@ export default async function Home() {
           Productos Destacados
         </h2>
 
-        <div className="relative">
-          <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
+        <div className="flex justify-center">
+          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory px-4">
             {productosDestacados.map((prod, index) => {
               const { id, title, slug, price_sale, images } = prod;
               const imageUrl = getImageUrl(images?.[0]);
@@ -165,7 +167,7 @@ export default async function Home() {
                 <Link
                   href={`/productos/${slug}`}
                   key={id}
-                   className="snap-start flex-shrink-0 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition first:ml-4 last:mr-4"
+                  className="snap-start flex-shrink-0 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition first:ml-4 last:mr-4"
                 >
                   <img
                     src={imageUrl}
@@ -194,11 +196,7 @@ export default async function Home() {
         </div>
       </section>
 
-
-      {/* 📢 Banner Productos */}
-      {bannersProductos.length > 0 && (
-        <CarruselPublicidad banners={bannersProductos} height={100} />
-      )}
+      {/* ... resto del código ... */}
 
       {/* EVENTOS DESTACADOS */}
       {eventosDestacados.length > 0 && (
@@ -207,34 +205,36 @@ export default async function Home() {
             <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
               Eventos Destacados
             </h2>
-            <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
-              {eventosDestacados.map((evento) => {
-                const { id, title, slug, price_sale, start_date, images } = evento;
-                const imageUrl = getImageUrl(images?.[0]);
+            <div className="flex justify-center">
+              <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory px-4">
+                {eventosDestacados.map((evento) => {
+                  const { id, title, slug, price_sale, start_date, images } = evento;
+                  const imageUrl = getImageUrl(images?.[0]);
 
-                return (
-                  <Link
-                    href={`/eventos/${slug}`}
-                    key={id}
-                    className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0 snap-start first:ml-4 last:mr-4"
-                  >
-                    <img
-                      src={imageUrl}
-                      alt={title}
-                      className="w-full h-40 object-cover rounded-t-xl"
-                    />
-                    <div className="p-3">
-                      <h3 className="text-sm font-semibold">{title}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
-                        ${price_sale.toLocaleString()}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {new Date(start_date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
+                  return (
+                    <Link
+                      href={`/eventos/${slug}`}
+                      key={id}
+                      className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0 snap-start first:ml-4 last:mr-4"
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={title}
+                        className="w-full h-40 object-cover rounded-t-xl"
+                      />
+                      <div className="p-3">
+                        <h3 className="text-sm font-semibold">{title}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                          ${price_sale.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {new Date(start_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
             <div className="mt-6 text-center">
               <Link
@@ -247,11 +247,6 @@ export default async function Home() {
           </section>
         </>
       )}
-      {/* 📢 Banner Eventos */}
-      {bannersEventos.length > 0 && (
-        <CarruselPublicidad banners={bannersEventos} height={100} />
-      )}
-
 
       {/* SERVICIOS DESTACADOS */}
       {serviciosDestacados.length > 0 && (
@@ -260,31 +255,33 @@ export default async function Home() {
             <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
               Servicios Destacados
             </h2>
-            <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
-              {serviciosDestacados.map((servicio) => {
-                const { id, title, slug, precio_aproximado, images } = servicio;
-                const imageUrl = getImageUrl(images?.[0]);
+            <div className="flex justify-center">
+              <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory px-4">
+                {serviciosDestacados.map((servicio) => {
+                  const { id, title, slug, precio_aproximado, images } = servicio;
+                  const imageUrl = getImageUrl(images?.[0]);
 
-                return (
-                  <Link
-                    href={`/servicios/${slug}`}
-                    key={id}
-                    className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0"
-                  >
-                    <img
-                      src={imageUrl}
-                      alt={title}
-                      className="w-full h-40 object-cover rounded-t-xl"
-                    />
-                    <div className="p-3">
-                      <h3 className="text-sm font-semibold">{title}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300">
-                        Precio aprox.: {precio_aproximado || "Consultar"}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
+                  return (
+                    <Link
+                      href={`/servicios/${slug}`}
+                      key={id}
+                      className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0"
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={title}
+                        className="w-full h-40 object-cover rounded-t-xl"
+                      />
+                      <div className="p-3">
+                        <h3 className="text-sm font-semibold">{title}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                          Precio aprox.: {precio_aproximado || "Consultar"}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
             <div className="mt-6 text-center">
               <Link
@@ -297,50 +294,48 @@ export default async function Home() {
           </section>
         </>
       )}
-      {/* 📢 Banner Servicios */}
-      {bannersServicios.length > 0 && (
-        <CarruselPublicidad banners={bannersServicios} height={100} />
-      )}
 
       {/* PROVEEDORES */}
       <section className="p-6 bg-gray-100 dark:bg-gray-900">
         <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
           Nuestros Proveedores
         </h2>
-        <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
-          {proveedores.map(({ id, name, slug, image }) => {
-            const imageUrl = getImageUrl(image?.[0]);
+        <div className="flex justify-center">
+          <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory px-4">
+            {proveedores.map(({ id, name, slug, image }) => {
+              const imageUrl = getImageUrl(image?.[0]);
 
-            return (
-              <Link
-                key={id}
-                href={`/vendedores/${slug}`}
-                className="flex flex-col items-center flex-shrink-0 w-24"
-              >
-                <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center overflow-hidden">
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt={name}
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-gray-600">
-                      <span>{name?.charAt(0)}</span>
-                    </div>
-                  )}
-                </div>
-                <span className="mt-2 text-xs text-gray-800 dark:text-white text-center leading-tight break-words max-w-[5rem]">
-                  {name}
-                </span>
-              </Link>
-            );
-          })}
-          {proveedores.length === 0 && (
-            <p className="text-center text-gray-500 dark:text-gray-400">
-              No hay proveedores para mostrar.
-            </p>
-          )}
+              return (
+                <Link
+                  key={id}
+                  href={`/vendedores/${slug}`}
+                  className="flex flex-col items-center flex-shrink-0 w-24"
+                >
+                  <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center overflow-hidden">
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={name}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-gray-600">
+                        <span>{name?.charAt(0)}</span>
+                      </div>
+                    )}
+                  </div>
+                  <span className="mt-2 text-xs text-gray-800 dark:text-white text-center leading-tight break-words max-w-[5rem]">
+                    {name}
+                  </span>
+                </Link>
+              );
+            })}
+            {proveedores.length === 0 && (
+              <p className="text-center text-gray-500 dark:text-gray-400">
+                No hay proveedores para mostrar.
+              </p>
+            )}
+          </div>
         </div>
       </section>
 
@@ -348,7 +343,6 @@ export default async function Home() {
       {bannersProveedores.length > 0 && (
         <CarruselPublicidad banners={bannersProveedores} height={100} />
       )}
-
     </main>
   );
 
