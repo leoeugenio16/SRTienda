@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getImageUrl } from "../utils/getImageUrl";
 import CarruselPublicidad from "../components/CarruselPublicidad";
 
+
 async function getCategorias() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/categories?populate=image`,
@@ -98,29 +99,34 @@ export default async function Home() {
     getBanners("servicios"),
     getBanners("proveedores"),
   ]);
+
   return (
     <main className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       <section className="p-6 text-center bg-gray-100 dark:bg-gray-900">
 
-      {/* Banner Top */}
-      {bannersTop.length > 0 && (
-        <CarruselPublicidad banners={bannersTop} height={180} />
-      )}
+        {/* Banner Top */}
+        {bannersTop.length > 0 && (
+          <CarruselPublicidad banners={bannersTop} height={180} />
+        )}
       </section>
 
       {/* CATEGORÍAS EN CÍRCULOS */}
-      <section className="p-6 text-center bg-gray-100 dark:bg-gray-900">
+      <section className="px-2 sm:px-6 text-center bg-gray-100 dark:bg-gray-900">
         <h2 className="text-2xl font-semibold mb-4 text-orange-600">Categorías</h2>
-        <div className="flex gap-6 overflow-x-auto px-4 justify-center">
-          {categorias.map((cat) => {
+        <div className="flex gap-6 overflow-x-auto justify-start scroll-snap-x snap-mandatory px-0">
+          {categorias.map((cat, index) => {
             const { id, name, slug, image } = cat;
             const imageUrl = getImageUrl(image);
+
+            const isFirst = index === 0;
+            const isLast = index === categorias.length - 1;
 
             return (
               <Link
                 key={id}
                 href={`/categorias/${slug}`}
-                className="flex flex-col items-center flex-shrink-0 w-24"
+                className={`flex flex-col items-center flex-shrink-0 w-24 snap-start ${isFirst ? "ml-4" : isLast ? "mr-4" : ""
+                  }`}
               >
                 <div className="bg-white dark:bg-gray-800 rounded-full shadow p-3 w-20 h-20 flex items-center justify-center">
                   <img
@@ -144,36 +150,40 @@ export default async function Home() {
       )}
 
       {/* PRODUCTOS DESTACADOS */}
-      <section className="p-4 bg-gray-200 dark:bg-gray-900">
+      <section className="px-4 py-6 bg-gray-200 dark:bg-gray-900">
         <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
           Productos Destacados
         </h2>
-        <div className="flex gap-6 overflow-x-auto px-4 justify-center">
-          {productosDestacados.map((prod) => {
-            const { id, title, slug, price_sale, images } = prod;
-            const imageUrl = getImageUrl(images?.[0]);
 
-            return (
-              <Link
-                href={`/productos/${slug}`}
-                key={id}
-                className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0"
-              >
-                <img
-                  src={imageUrl}
-                  alt={title}
-                  className="w-full h-40 object-cover rounded-t-xl"
-                />
-                <div className="p-3">
-                  <h3 className="text-sm font-semibold">{title}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    ${price_sale.toLocaleString()}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
+        <div className="relative">
+          <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
+            {productosDestacados.map((prod, index) => {
+              const { id, title, slug, price_sale, images } = prod;
+              const imageUrl = getImageUrl(images?.[0]);
+
+              return (
+                <Link
+                  href={`/productos/${slug}`}
+                  key={id}
+                   className="snap-start flex-shrink-0 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition first:ml-4 last:mr-4"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={title}
+                    className="w-full h-40 object-cover rounded-t-xl"
+                  />
+                  <div className="p-3">
+                    <h3 className="text-sm font-semibold">{title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      ${price_sale.toLocaleString()}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
+
         <div className="mt-6 text-center">
           <Link
             href="/productos"
@@ -184,6 +194,7 @@ export default async function Home() {
         </div>
       </section>
 
+
       {/* 📢 Banner Productos */}
       {bannersProductos.length > 0 && (
         <CarruselPublicidad banners={bannersProductos} height={100} />
@@ -192,12 +203,11 @@ export default async function Home() {
       {/* EVENTOS DESTACADOS */}
       {eventosDestacados.length > 0 && (
         <>
-
           <section className="p-4 bg-gray-100 dark:bg-gray-900">
             <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
               Eventos Destacados
             </h2>
-            <div className="flex gap-6 overflow-x-auto px-4 justify-center">
+            <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
               {eventosDestacados.map((evento) => {
                 const { id, title, slug, price_sale, start_date, images } = evento;
                 const imageUrl = getImageUrl(images?.[0]);
@@ -206,7 +216,7 @@ export default async function Home() {
                   <Link
                     href={`/eventos/${slug}`}
                     key={id}
-                    className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0"
+                    className="min-w-[200px] w-48 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-lg transition flex-shrink-0 snap-start first:ml-4 last:mr-4"
                   >
                     <img
                       src={imageUrl}
@@ -250,7 +260,7 @@ export default async function Home() {
             <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
               Servicios Destacados
             </h2>
-            <div className="flex gap-6 overflow-x-auto px-4 justify-center">
+            <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
               {serviciosDestacados.map((servicio) => {
                 const { id, title, slug, precio_aproximado, images } = servicio;
                 const imageUrl = getImageUrl(images?.[0]);
@@ -297,7 +307,7 @@ export default async function Home() {
         <h2 className="text-2xl font-semibold mb-4 text-center text-orange-600">
           Nuestros Proveedores
         </h2>
-        <div className="flex gap-6 overflow-x-auto px-4 justify-center">
+        <div className="flex gap-6 overflow-x-auto px-4 snap-x snap-mandatory justify-start">
           {proveedores.map(({ id, name, slug, image }) => {
             const imageUrl = getImageUrl(image?.[0]);
 

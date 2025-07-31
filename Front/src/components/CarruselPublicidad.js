@@ -1,4 +1,5 @@
 "use client";
+import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
 export default function CarruselPublicidad({ banners }) {
@@ -77,13 +78,13 @@ export default function CarruselPublicidad({ banners }) {
                         }
                         className="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 text-white rounded-full p-2 hover:bg-opacity-50 transition"
                     >
-                        ◀
+                        <ArrowBigLeft />
                     </button>
                     <button
                         onClick={() => setIndex((prev) => (prev + 1) % banners.length)}
                         className="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-30 text-white rounded-full p-2 hover:bg-opacity-50 transition"
                     >
-                        ▶
+                        <ArrowBigRight />
                     </button>
                 </>
             )}
