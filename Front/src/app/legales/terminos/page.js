@@ -9,7 +9,7 @@ export default function TerminosPage() {
       <p className="mb-4">
         Bienvenido a <strong>SRTienda</strong>. Al acceder, registrarte o utilizar esta plataforma, aceptás los presentes
         Términos y Condiciones de uso, que regulan la relación entre vos (usuario o proveedor) y el Administrador de esta
-        plataforma (Leandro Eugenio).
+        plataforma (Leandro Eugenio y Gerardo Reinoso).
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">1. Objeto de la plataforma</h2>
