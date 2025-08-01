@@ -11,15 +11,44 @@ async function getServicioBySlug(slug) {
   return data.data?.[0] || null;
 }
 
+// Componente para mostrar imagen o video
+function MediaDisplay({ media }) {
+  if (!media || !media.url) return null;
+  const isVideo = media.mime?.startsWith("video/");
+
+  return (
+    <div className="w-full h-full">
+      {isVideo ? (
+        <video
+          src={media.url}
+          className="w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      ) : (
+        <img
+          src={media.url}
+          alt={media.alternativeText || "media"}
+          className="w-full h-full object-cover"
+        />
+      )}
+    </div>
+  );
+}
+
 export default function ServicioPage({ params }) {
-  const { slug } = use(params)
+  const { slug } = use(params);
   const [servicio, setServicio] = useState(null);
   const { agregarProducto } = useCart();
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     async function fetchServicio() {
       const data = await getServicioBySlug(slug);
       setServicio(data);
+      setSelectedImage(data?.images?.[0]);
     }
     fetchServicio();
   }, [slug]);
@@ -36,15 +65,13 @@ export default function ServicioPage({ params }) {
     provider,
   } = servicio;
 
-  const imagenPrincipal = getImageUrl(images?.[0]);
-
   const handleAgregarAlCarrito = () => {
     const nuevoItem = {
       documentId,
       nombre: title,
       slug,
       precio: precio_aproximado || "Consultar",
-      imagen: imagenPrincipal,
+      imagen: getImageUrl(selectedImage),
       cantidad: 1,
       proveedorDocumentId: provider?.documentId || null,
       proveedorNombre: provider?.name || "Desconocido",
@@ -52,7 +79,7 @@ export default function ServicioPage({ params }) {
     };
 
     agregarProducto(nuevoItem);
-    alert("Servicio agregado al carrito ✅");
+    alert("Servicio agregado al carrito ");
   };
 
   return (
@@ -63,13 +90,11 @@ export default function ServicioPage({ params }) {
         </h1>
 
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
-          {/* Imagen principal */}
-          {imagenPrincipal && (
-            <img
-              src={imagenPrincipal}
-              alt="Imagen principal"
-              className="w-60 h-60 object-cover rounded shadow"
-            />
+          {/* Imagen o video principal */}
+          {selectedImage && (
+            <div className="w-60 h-60 rounded shadow overflow-hidden">
+              <MediaDisplay media={selectedImage} />
+            </div>
           )}
 
           {/* Info a la derecha */}
@@ -77,7 +102,6 @@ export default function ServicioPage({ params }) {
             <p className="mb-4 text-lg leading-relaxed break-words whitespace-pre-line">
               {descripcion}
             </p>
-
 
             <p className="text-gray-700 dark:text-gray-300 mb-2">
               <strong>Precio aproximado:</strong>{" "}
@@ -87,7 +111,10 @@ export default function ServicioPage({ params }) {
             {provider?.name && (
               <div className="flex items-center gap-3 mb-4">
                 {provider?.image && (
-                  <a href={`/proveedor/${provider.slug || ""}`} className="flex-shrink-0">
+                  <a
+                    href={`/proveedor/${provider.slug || ""}`}
+                    className="flex-shrink-0"
+                  >
                     <img
                       src={getImageUrl(provider.image)}
                       alt={provider.name}
@@ -107,6 +134,23 @@ export default function ServicioPage({ params }) {
           </div>
         </div>
 
+        {/* Miniaturas de imágenes */}
+        {images.length > 1 && (
+          <div className="flex gap-4 overflow-x-auto mb-8">
+            {images.map((img, idx) => (
+              <div
+                key={idx}
+                className={`w-20 h-20 rounded shadow overflow-hidden ${
+                  selectedImage === img ? "ring-2 ring-orange-500" : ""
+                }`}
+                onClick={() => setSelectedImage(img)}
+              >
+                <MediaDisplay media={img} />
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Botón de WhatsApp */}
         {provider?.whatsapp && (
           <div className="text-center">
@@ -122,6 +166,14 @@ export default function ServicioPage({ params }) {
             </a>
           </div>
         )}
+
+        {/* Botón Agregar al Carrito */}
+        <button
+          onClick={handleAgregarAlCarrito}
+          className="block w-full mt-4 bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition"
+        >
+          Agregar al carrito
+        </button>
       </div>
     </section>
   );
