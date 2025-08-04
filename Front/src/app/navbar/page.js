@@ -13,6 +13,7 @@ import {
   Clock1,
   Wrench,
   Phone,
+  PersonStanding,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -173,6 +174,13 @@ export default function Navbar() {
             >
               <CalendarDays className="w-5 h-5" />
               Eventos
+            </Link>
+            <Link
+              href="servicios-comunitarios"
+              className="flex items-center gap-1 hover:text-orange-700 transition"
+            >
+              <PersonStanding className="w-5 h-5" />
+              Comunidad
             </Link>
             <Link
               href="/contacto"
@@ -351,6 +359,13 @@ export default function Navbar() {
             >
               <CalendarDays className="w-5 h-5" />
               Eventos
+            </Link>
+            <Link
+              href="servicios-comunitarios"
+              className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
+            >
+              <PersonStanding className="w-5 h-5" />
+              Cmunidad 
             </Link>
             <Link
               href="/contacto"
