@@ -75,6 +75,12 @@
     },
     "venta_segura": {
       "type": "boolean"
+    },
+    "segura": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::venta-segura.venta-segura",
+      "mappedBy": "product"
     }
   }
 }

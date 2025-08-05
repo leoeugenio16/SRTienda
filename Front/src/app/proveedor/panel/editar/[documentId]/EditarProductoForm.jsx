@@ -10,7 +10,7 @@ console.warn = (...args) => {
     originalWarn(...args); // sigue mostrando el warning normal
 };
 
-export default function EditarProductoForm({ producto, baseUrl }) {
+export default function EditarProductoForm({ producto, baseUrl, token }) {
     const [title, setTitle] = useState(producto.title);
     const [description, setDescription] = useState(producto.description);
     const [priceSale, setPriceSale] = useState(producto.price_sale || '');
@@ -78,6 +78,9 @@ export default function EditarProductoForm({ producto, baseUrl }) {
         try {
             const res = await fetch(`${baseUrl}/api/upload`, {
                 method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`, // 👈 importante
+                },
                 body: formData,
             });
             const uploadedImages = await res.json();
@@ -99,6 +102,9 @@ export default function EditarProductoForm({ producto, baseUrl }) {
         try {
             await fetch(`${baseUrl}/api/upload/files/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`, // 
+                },
             });
             setImages(prev => prev.filter(img => img.id !== id));
             console.log('Imágenes tras eliminar:', images);
@@ -126,7 +132,10 @@ export default function EditarProductoForm({ producto, baseUrl }) {
         try {
             const res = await fetch(`${baseUrl}/api/products/${producto.documentId}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`, // 👈 necesario
+                },
                 body: JSON.stringify(payload),
             });
 

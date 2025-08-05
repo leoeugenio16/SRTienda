@@ -627,6 +627,10 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     price_sale: Schema.Attribute.Decimal;
     provider: Schema.Attribute.Relation<'manyToOne', 'api::provider.provider'>;
     publishedAt: Schema.Attribute.DateTime;
+    segura: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::venta-segura.venta-segura'
+    >;
     slug: Schema.Attribute.UID<'title'>;
     stock_virtual: Schema.Attribute.Integer;
     subcategory: Schema.Attribute.Relation<
@@ -757,6 +761,49 @@ export interface ApiSubcategorySubcategory extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+  };
+}
+
+export interface ApiVentaSeguraVentaSegura extends Struct.CollectionTypeSchema {
+  collectionName: 'venta_seguras';
+  info: {
+    description: '';
+    displayName: 'venta_segura';
+    pluralName: 'venta-seguras';
+    singularName: 'venta-segura';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    codigo_entrega: Schema.Attribute.String;
+    comentarios: Schema.Attribute.Text;
+    comprador: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    entrega_confirmada: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
+    fecha_pactada: Schema.Attribute.Date;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::venta-segura.venta-segura'
+    > &
+      Schema.Attribute.Private;
+    product: Schema.Attribute.Relation<'oneToOne', 'api::product.product'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    vendedor: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    vendedor_confirmo: Schema.Attribute.Boolean;
   };
 }
 
@@ -1284,6 +1331,7 @@ declare module '@strapi/strapi' {
       'api::provider.provider': ApiProviderProvider;
       'api::servicio.servicio': ApiServicioServicio;
       'api::subcategory.subcategory': ApiSubcategorySubcategory;
+      'api::venta-segura.venta-segura': ApiVentaSeguraVentaSegura;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

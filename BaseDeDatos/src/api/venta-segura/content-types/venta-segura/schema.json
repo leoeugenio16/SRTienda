@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "venta_seguras",
+  "info": {
+    "singularName": "venta-segura",
+    "pluralName": "venta-seguras",
+    "displayName": "venta_segura",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "inversedBy": "segura"
+    },
+    "comprador": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "vendedor": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "codigo_entrega": {
+      "type": "string"
+    },
+    "fecha_pactada": {
+      "type": "date"
+    },
+    "entrega_confirmada": {
+      "type": "boolean",
+      "default": false
+    },
+    "vendedor_confirmo": {
+      "type": "boolean"
+    },
+    "comentarios": {
+      "type": "text"
+    }
+  }
+}

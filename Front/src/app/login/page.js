@@ -9,21 +9,54 @@ export default function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      // 1. Login
+      const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (data.jwt) {
+      if (!data.jwt) {
+        setError(data.error?.message || "Credenciales inválidas");
+        return;
+      }
+
+      // 2. Guardar token y usuario
       localStorage.setItem("token", data.jwt);
       localStorage.setItem("user", JSON.stringify(data.user));
-      router.push("/proveedor/panel");
-    } else {
-      setError(data.error?.message || "Credenciales inválidas");
+
+      // 3. Obtener el rol desde /users/me
+      const meRes = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/users/me?populate=role`, {
+        headers: {
+          Authorization: `Bearer ${data.jwt}`,
+        },
+      });
+
+      if (!meRes.ok) {
+        throw new Error("No se pudo obtener el rol del usuario.");
+      }
+
+      const userData = await meRes.json();
+      const rolNombre = userData.role?.name?.toLowerCase().trim();
+      console.log("Rol detectado:", rolNombre);
+
+      // 4. Redirigir según el rol
+      if (rolNombre === "super admin") {
+        router.push("/ventas-seguras");
+      } else if (rolNombre === "authenticated") {
+        router.push("/proveedor/panel");
+      } else {
+        setError("Rol no autorizado.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      setError("Ocurrió un error al iniciar sesión.");
     }
   };
 
@@ -40,13 +73,7 @@ export default function LoginPage() {
           value={form.identifier}
           onChange={(e) => setForm({ ...form, identifier: e.target.value })}
           required
-          className="
-          w-full p-3 rounded-full border border-gray-300 
-          bg-white text-gray-900 placeholder-gray-400
-          dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500
-          focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-          transition
-        "
+          className="w-full p-3 rounded-full border bg-white dark:bg-gray-800"
         />
         <input
           type="password"
@@ -54,25 +81,15 @@ export default function LoginPage() {
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
           required
-          className="
-          w-full p-3 rounded-full border border-gray-300 
-          bg-white text-gray-900 placeholder-gray-400
-          dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-500
-          focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500
-          transition
-        "
+          className="w-full p-3 rounded-full border bg-white dark:bg-gray-800"
         />
         <button
           type="submit"
-          className="
-          w-full bg-orange-500 text-white py-3 rounded-full font-semibold
-          hover:bg-orange-600 transition
-        "
+          className="w-full bg-orange-500 text-white py-3 rounded-full font-semibold hover:bg-orange-600 transition"
         >
           Ingresar
         </button>
       </form>
     </section>
   );
-
 }
