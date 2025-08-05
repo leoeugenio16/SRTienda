@@ -365,7 +365,7 @@ export default function Navbar() {
               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
             >
               <PersonStanding className="w-5 h-5" />
-              Cmunidad 
+              Comunidad 
             </Link>
             <Link
               href="/contacto"
