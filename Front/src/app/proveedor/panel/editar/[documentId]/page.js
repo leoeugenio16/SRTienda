@@ -60,6 +60,7 @@ export default function EditarProductoPage({ params }) {
   if (cargando) return <p className="p-6 text-center">Cargando producto...</p>;
   if (error) return <p className="p-6 text-red-600">{error}</p>;
   if (!producto) return null;
+  const token = localStorage.getItem("token");
 
-  return <EditarProductoForm producto={producto} baseUrl={baseUrl} />;
+  return <EditarProductoForm producto={producto} baseUrl={baseUrl} token={token} />;
 }
