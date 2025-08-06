@@ -176,7 +176,7 @@ export default function Navbar() {
               Eventos
             </Link>
             <Link
-              href="servicios-comunitarios"
+              href="/servicios-comunitarios"
               className="flex items-center gap-1 hover:text-orange-700 transition"
             >
               <PersonStanding className="w-5 h-5" />
@@ -361,7 +361,7 @@ export default function Navbar() {
               Eventos
             </Link>
             <Link
-              href="servicios-comunitarios"
+              href="/servicios-comunitarios"
               className="block py-3 flex items-center gap-2 text-orange-600 hover:text-orange-700 transition font-medium"
             >
               <PersonStanding className="w-5 h-5" />

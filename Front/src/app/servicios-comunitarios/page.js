@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 async function getAvisos() {

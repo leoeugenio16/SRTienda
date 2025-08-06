@@ -47,7 +47,7 @@ export default function LoginPage() {
 
       // 4. Redirigir según el rol
       if (rolNombre === "super admin") {
-        router.push("/ventas-seguras");
+        router.push("/administracion");
       } else if (rolNombre === "authenticated") {
         router.push("/proveedor/panel");
       } else {
