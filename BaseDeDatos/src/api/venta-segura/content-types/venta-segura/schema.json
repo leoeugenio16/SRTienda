@@ -42,6 +42,15 @@
     },
     "comentarios": {
       "type": "text"
+    },
+    "token_entrega": {
+      "type": "string",
+      "required": false,
+      "unique": true
+    },
+    "token_usado": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

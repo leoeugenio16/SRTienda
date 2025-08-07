@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { nanoid } from 'nanoid'
 
 
 const API_URL = process.env.NEXT_PUBLIC_STRAPI_URL
@@ -124,8 +125,8 @@ export default function VentasSegurasPage() {
           {ventas.map((venta) => {
             // Obtener la URL de la primera imagen (thumbnail) del producto si existe
             const imagenUrl =
-              venta.product?.images?.data?.[0]?.attributes?.formats?.thumbnail?.url ||
-              venta.product?.images?.data?.[0]?.attributes?.url ||
+              venta.product?.images?.data?.[0]?.formats?.thumbnail?.url ||
+              venta.product?.images?.data?.[0]?.url ||
               null
 
             // Formatear url completa (agrega dominio si es url relativa)
@@ -134,6 +135,38 @@ export default function VentasSegurasPage() {
                 ? imagenUrl
                 : `${API_URL}${imagenUrl}`
               : null
+
+            const generarCodigo = () => Math.random().toString(36).substring(2, 7).toUpperCase()
+            const actualizarCampo = async (ventaId, campo, valor) => {
+              const token = localStorage.getItem('token')
+              try {
+                const res = await fetch(`${API_URL}/api/venta-seguras/${ventaId}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                  body: JSON.stringify({
+                    data: {
+                      [campo]: valor,
+                    },
+                  }),
+                })
+
+                if (res.ok) {
+                  // Actualizar ventas localmente para reflejar el cambio sin recargar
+                  setVentas((prev) =>
+                    prev.map((v) =>
+                      v.documentId === ventaId ? { ...v, [campo]: valor } : v
+                    )
+                  )
+                } else {
+                  console.error(`Error al actualizar ${campo}:`, await res.text())
+                }
+              } catch (error) {
+                console.error('Error al actualizar campo:', error)
+              }
+            }
 
             return (
               <li key={venta.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 flex flex-col sm:flex-row gap-4 items-center">
@@ -180,6 +213,44 @@ export default function VentasSegurasPage() {
                     <p>
                       <strong>Comentarios:</strong> {venta.comentarios || '—'}
                     </p>
+                    <p>
+                      <strong>Token entrega:</strong>{' '}
+                      {venta.token_entrega ? (
+                        <>
+                          <span className="font-mono">{venta.token_entrega}</span>{' '}
+                          <a
+                            href={`/administracion/ventas-seguras/${venta.token_entrega}`}
+                            target="_blank"
+                            className="text-blue-600 underline text-sm"
+                          >
+                            Ver enlace
+                          </a>
+                        </>
+                      ) : (
+                        '—'
+                      )}
+                    </p>
+                    {/* NUEVO: botón si no tiene token */}
+                    {!venta.token_entrega && (
+                      <button
+                        className="text-sm text-blue-600 underline"
+                        onClick={() => actualizarCampo(venta.documentId, 'token_entrega', nanoid(12))}
+                      >
+                        Generar token de entrega
+                      </button>
+                    )}
+                    <p>
+                      <strong>Código entrega:</strong> {venta.codigo_entrega || '—'}
+                    </p>
+                    {/* NUEVO: botón si no tiene código */}
+                    {!venta.codigo_entrega && (
+                      <button
+                        className="text-sm text-blue-600 underline"
+                        onClick={() => actualizarCampo(venta.id, 'codigo_entrega', generarCodigo())}
+                      >
+                        Generar código de entrega
+                      </button>
+                    )}
                   </div>
 
                   <div className="mt-3 space-y-1 text-gray-700 dark:text-gray-300 text-sm">
