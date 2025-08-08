@@ -52,7 +52,7 @@ export default function VentasSegurasPage() {
       if (!token) return
 
       try {
-        let url = `${API_URL}/api/venta-seguras?populate=vendedor&populate=comprador&populate=product.provider&populate=product.images`
+        let url = `${API_URL}/api/venta-seguras?populate=vendedor&populate=comprador&populate=product.provider&populate=product.images&secret=${process.env.NEXT_PUBLIC_ENTREGA_SECRET}`
         if (fechaInicio && fechaFin) {
           url += `&filters[createdAt][$gte]=${fechaInicio}&filters[createdAt][$lte]=${fechaFin}`
         }
