@@ -24,11 +24,8 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
     const [selectedImage, setSelectedImage] = useState(null);
     const fileInputRefs = useRef({});
 
-    console.log('Imágenes iniciales:', initialImages);
-
     async function handleReplaceImage(id, e) {
         const file = e.target.files[0];
-        console.log('Archivo para reemplazar:', file);
         if (!file) return;
 
         setUploading(true);
@@ -42,12 +39,10 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
                 body: formData,
             });
             const uploadedImages = await res.json();
-            console.log('Respuesta upload reemplazo:', uploadedImages);
 
             const newImage = Array.isArray(uploadedImages) ? uploadedImages[0] : uploadedImages;
 
             setImages(prev => prev.map(img => (img.id === id ? newImage : img)));
-            console.log('Imágenes actualizadas tras reemplazo:', images);
         } catch (error) {
             console.error('Error al reemplazar imagen:', error);
             alert('Error al reemplazar imagen');
@@ -57,7 +52,6 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
     }
 
     function triggerFileInput(id) {
-        console.log('Trigger input file para imagen id:', id);
         if (fileInputRefs.current[id]) {
             fileInputRefs.current[id].click();
         }
@@ -65,7 +59,6 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
 
     async function handleFileChange(e) {
         const files = e.target.files;
-        console.log('Archivos nuevos para subir:', files);
         if (!files.length) return;
 
         setUploading(true);
@@ -84,11 +77,8 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
                 body: formData,
             });
             const uploadedImages = await res.json();
-            console.log('Respuesta upload nuevas imágenes:', uploadedImages);
-
             const newImages = Array.isArray(uploadedImages) ? uploadedImages : [uploadedImages];
             setImages(prev => [...prev, ...newImages]);
-            console.log('Imágenes tras agregar nuevas:', images);
         } catch (error) {
             console.error('Error al subir imágenes:', error);
             alert('Error al subir imágenes');
@@ -98,7 +88,6 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
     }
 
     async function handleRemoveImage(id) {
-        console.log('Eliminar imagen id:', id);
         try {
             await fetch(`${baseUrl}/api/upload/files/${id}`, {
                 method: 'DELETE',
@@ -107,7 +96,6 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
                 },
             });
             setImages(prev => prev.filter(img => img.id !== id));
-            console.log('Imágenes tras eliminar:', images);
         } catch (error) {
             console.error('Error al eliminar imagen:', error);
             alert('Error al eliminar imagen');
@@ -126,8 +114,6 @@ export default function EditarProductoForm({ producto, baseUrl, token }) {
                 images: images.map(img => img.id),
             }
         };
-
-        console.log('Payload para actualizar producto:', payload);
 
         try {
             const res = await fetch(`${baseUrl}/api/products/${producto.documentId}`, {

@@ -36,8 +36,9 @@
     },
     "publicado_por": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::provider.provider"
+      "relation": "manyToOne",
+      "target": "api::provider.provider",
+      "inversedBy": "avisos_comunitarios"
     },
     "estado": {
       "type": "enumeration",

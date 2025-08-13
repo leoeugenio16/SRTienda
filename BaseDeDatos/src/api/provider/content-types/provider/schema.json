@@ -59,7 +59,8 @@
       "enum": [
         "Particular",
         "Comercio",
-        "Servicio"
+        "Servicio",
+        "Comunidad"
       ]
     },
     "servicios": {
@@ -73,6 +74,12 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "mappedBy": "provider_profile"
+    },
+    "avisos_comunitarios": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::avisos-comunitario.avisos-comunitario",
+      "mappedBy": "publicado_por"
     }
   }
 }

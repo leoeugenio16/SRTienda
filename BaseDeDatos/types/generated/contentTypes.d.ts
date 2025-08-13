@@ -400,7 +400,7 @@ export interface ApiAvisosComunitarioAvisosComunitario
     > &
       Schema.Attribute.Private;
     publicado_por: Schema.Attribute.Relation<
-      'oneToOne',
+      'manyToOne',
       'api::provider.provider'
     >;
     publishedAt: Schema.Attribute.DateTime;
@@ -659,6 +659,10 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    avisos_comunitarios: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::avisos-comunitario.avisos-comunitario'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -681,7 +685,9 @@ export interface ApiProviderProvider extends Struct.CollectionTypeSchema {
     servicios: Schema.Attribute.Relation<'oneToMany', 'api::servicio.servicio'>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     sobreNosotros: Schema.Attribute.Text;
-    tipo: Schema.Attribute.Enumeration<['Particular', 'Comercio', 'Servicio']>;
+    tipo: Schema.Attribute.Enumeration<
+      ['Particular', 'Comercio', 'Servicio', 'Comunidad']
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

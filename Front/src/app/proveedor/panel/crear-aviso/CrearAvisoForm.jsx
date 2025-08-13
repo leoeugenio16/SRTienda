@@ -6,7 +6,7 @@ import { getImageUrl } from "../../../../utils/getImageUrl";
 const ESTADOS = ["Perdido", "Encontrado", "Anuncio"];
 
 export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
-  // ----- Estados del formulario -----
+  /* ----- Estados del formulario ----- */
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [estado, setEstado] = useState("Anuncio");
@@ -16,7 +16,7 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
   const [imagenes, setImagenes] = useState([]);
   const [subiendo, setSubiendo] = useState(false);
 
-  // ---------- helpers imágenes ----------
+  /* ---------- helpers imágenes ---------- */
   async function subirArchivos(files) {
     const fd = new FormData();
     [...files].forEach((f) => fd.append("files", f));
@@ -40,25 +40,33 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
         ...prev,
         ...(Array.isArray(uploaded) ? uploaded : [uploaded]),
       ]);
+    } catch (e) {
+      console.error(e);
+      alert("No se pudieron subir las imágenes");
     } finally {
       setSubiendo(false);
     }
   };
 
   const handleRemove = async (id) => {
-    await fetch(`${baseUrl}/api/upload/files/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setImagenes((prev) => prev.filter((img) => img.id !== id));
+    try {
+      await fetch(`${baseUrl}/api/upload/files/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setImagenes((prev) => prev.filter((img) => img.id !== id));
+    } catch (e) {
+      console.error(e);
+      alert("No se pudo eliminar la imagen");
+    }
   };
 
-  // ---------- submit ----------
+  /* ---------- submit ---------- */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubiendo(true);
 
-    // El slug (UID) se genera solo desde "titulo" en Strapi
+    // El slug es UID con targetField "titulo": Strapi lo genera solo
     const payload = {
       data: {
         titulo,
@@ -66,8 +74,8 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
         estado,
         link_whatsapp: linkWhatsapp || null,
         link_pagina: linkPagina || null,
-        publicado_por: proveedorId,           // 👈 igual patrón que products->provider
-        imagenes: imagenes.map((i) => i.id),  // IDs de media
+        publicado_por: proveedorId,            // relación con provider (usás documentId)
+        imagenes: imagenes.map((i) => i.id),   // IDs de media
       },
     };
 
@@ -82,7 +90,7 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
       });
 
       if (!res.ok) {
-        console.error(await res.text());
+        console.error("crear aviso error:", res.status, await res.text());
         alert("Error al crear aviso comunitario");
         setSubiendo(false);
         return;
@@ -98,7 +106,7 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
     }
   };
 
-  // ---------- UI ----------
+  /* ---------- UI ---------- */
   return (
     <form
       onSubmit={handleSubmit}
@@ -133,7 +141,9 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
         onChange={(e) => setEstado(e.target.value)}
       >
         {ESTADOS.map((opt) => (
-          <option key={opt} value={opt}>{opt}</option>
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
         ))}
       </select>
 
@@ -159,10 +169,7 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
           {imagenes.map((img, idx) => {
             const url = getImageUrl(img);
             return (
-              <div
-                key={img.id || idx}
-                className="relative flex flex-col items-center"
-              >
+              <div key={img.id || idx} className="relative flex flex-col items-center">
                 <img
                   src={url}
                   alt={`img-${idx}`}
@@ -182,6 +189,7 @@ export default function CrearAvisoForm({ baseUrl, token, proveedorId }) {
         <input
           type="file"
           multiple
+          accept="image/*"
           onChange={handleAddImages}
           disabled={subiendo}
           className="mt-4 text-sm text-gray-800 dark:text-gray-200"
