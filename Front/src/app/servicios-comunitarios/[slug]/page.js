@@ -35,8 +35,10 @@ function MediaDisplay({ media, isMain = false, onClick, selected }) {
 }
 
 async function getNoticeBySlug(slug) {
-  const url = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/avisos-comunitarios?filters[slug][$eq]=${slug}&populate=imagenes`;
-  
+  const base = `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/avisos-comunitarios?filters[slug][$eq]=${slug}&populate=imagenes`;
+  const secret = process.env.NEXT_PUBLIC_ENTREGA_SECRET; // 👈 igual que en el otro
+  const url = secret ? `${base}&secret=${encodeURIComponent(secret)}` : base;
+
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) {
     console.error("Error fetching notice:", await res.text());
