@@ -2,9 +2,23 @@ import Link from "next/link";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 async function getAvisos() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/avisos-comunitarios?populate=imagenes&sort=createdAt:desc`, {
-    cache: "no-store",
-  });
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL;
+  const secret = process.env.NEXT_PUBLIC_ENTREGA_SECRET; // 👈 usar el mismo que ya te funciona
+
+  const qs = new URLSearchParams();
+  qs.set("sort", "createdAt:desc");
+  qs.set("populate[imagenes]", "true");
+
+  const url =
+    `${baseUrl}/api/avisos-comunitarios?${qs.toString()}` +
+    (secret ? `&secret=${encodeURIComponent(secret)}` : ""); // 👈 lo pasamos por query
+
+  const res = await fetch(url, { cache: "no-store" });
+
+  if (!res.ok) {
+    console.error("[Server][ComunidadPage] fetch avisos error:", res.status, await res.text());
+    return [];
+  }
   const data = await res.json();
   return data.data;
 }
