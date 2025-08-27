@@ -132,9 +132,8 @@ export default function ServicioPage({ params }) {
                         key={idx}
                         type="button"
                         onClick={() => setSelectedImage(img)}
-                        className={`flex-shrink-0 w-20 h-20 md:w-20 md:h-20 rounded shadow overflow-hidden snap-start focus:outline-none ${
-                          isSelected ? "ring-2 ring-orange-500" : ""
-                        }`}
+                        className={`flex-shrink-0 w-20 h-20 md:w-20 md:h-20 rounded shadow overflow-hidden snap-start focus:outline-none ${isSelected ? "ring-2 ring-orange-500" : ""
+                          }`}
                         aria-label={`Miniatura ${idx + 1}`}
                       >
                         <MediaDisplay media={img} />
@@ -214,12 +213,12 @@ export default function ServicioPage({ params }) {
         )}
 
         {/* Botón Agregar al Carrito */}
-        <button
+        {/*  <button
           onClick={handleAgregarAlCarrito}
           className="block w-full mt-4 bg-orange-500 text-white px-6 py-3 rounded-full hover:bg-orange-600 transition"
         >
           Agregar al carrito
-        </button>
+        </button> */}
       </div>
     </section>
   );
