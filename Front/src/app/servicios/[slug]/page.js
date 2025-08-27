@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, useRef } from "react";
 import { useCart } from "../../context/CartContext";
 import { getImageUrl } from "../../../utils/getImageUrl";
 
@@ -15,7 +15,6 @@ async function getServicioBySlug(slug) {
 function MediaDisplay({ media }) {
   if (!media || !media.url) return null;
   const isVideo = media.mime?.startsWith("video/");
-
   return (
     <div className="w-full h-full">
       {isVideo ? (
@@ -43,6 +42,7 @@ export default function ServicioPage({ params }) {
   const [servicio, setServicio] = useState(null);
   const { agregarProducto } = useCart();
   const [selectedImage, setSelectedImage] = useState(null);
+  const thumbRef = useRef(null);
 
   useEffect(() => {
     async function fetchServicio() {
@@ -82,6 +82,13 @@ export default function ServicioPage({ params }) {
     alert("Servicio agregado al carrito ");
   };
 
+  // helper para scroll de miniaturas
+  const scrollThumbs = (delta) => {
+    if (thumbRef.current) {
+      thumbRef.current.scrollBy({ left: delta, behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="pt-20 px-4 bg-white text-gray-900 dark:bg-gray-900 dark:text-white">
       <div className="max-w-4xl mx-auto">
@@ -89,15 +96,71 @@ export default function ServicioPage({ params }) {
           {title}
         </h1>
 
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 mb-8">
-          {/* Imagen o video principal */}
-          {selectedImage && (
-            <div className="w-60 h-60 rounded shadow overflow-hidden">
-              <MediaDisplay media={selectedImage} />
-            </div>
-          )}
+        {/* Contenedor principal: imagen+thumbnails a la izquierda, info a la derecha */}
+        <div className="flex flex-col md:flex-row items-start gap-6 mb-8">
+          {/* Columna izquierda */}
+          <div className="w-full md:w-72">
+            {/* Imagen/video principal */}
+            {selectedImage && (
+              <div className="w-full aspect-square rounded shadow overflow-hidden">
+                <MediaDisplay media={selectedImage} />
+              </div>
+            )}
 
-          {/* Info a la derecha */}
+            {/* Miniaturas scrolleables debajo de la imagen */}
+            {images.length > 1 && (
+              <div className="mt-4 relative">
+                {/* Botón Izquierda (solo desktop) */}
+                <button
+                  type="button"
+                  aria-label="Desplazar miniaturas a la izquierda"
+                  onClick={() => scrollThumbs(-240)}
+                  className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 px-2 py-1 rounded-full bg-white/80 dark:bg-black/40 shadow hover:scale-105"
+                >
+                  ‹
+                </button>
+
+                {/* Tira scrolleable */}
+                <div
+                  ref={thumbRef}
+                  className="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory py-1 px-1"
+                >
+                  {images.map((img, idx) => {
+                    const isSelected = selectedImage === img;
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setSelectedImage(img)}
+                        className={`flex-shrink-0 w-20 h-20 md:w-20 md:h-20 rounded shadow overflow-hidden snap-start focus:outline-none ${
+                          isSelected ? "ring-2 ring-orange-500" : ""
+                        }`}
+                        aria-label={`Miniatura ${idx + 1}`}
+                      >
+                        <MediaDisplay media={img} />
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Botón Derecha (solo desktop) */}
+                <button
+                  type="button"
+                  aria-label="Desplazar miniaturas a la derecha"
+                  onClick={() => scrollThumbs(240)}
+                  className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 px-2 py-1 rounded-full bg-white/80 dark:bg-black/40 shadow hover:scale-105"
+                >
+                  ›
+                </button>
+
+                {/* Gradientes laterales como pista visual */}
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white dark:from-gray-900 to-transparent"></div>
+                <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white dark:from-gray-900 to-transparent"></div>
+              </div>
+            )}
+          </div>
+
+          {/* Columna derecha: info */}
           <div className="flex-1">
             <p className="mb-4 text-lg leading-relaxed break-words whitespace-pre-line">
               {descripcion}
@@ -133,23 +196,6 @@ export default function ServicioPage({ params }) {
             )}
           </div>
         </div>
-
-        {/* Miniaturas de imágenes */}
-        {images.length > 1 && (
-          <div className="flex gap-4 overflow-x-auto mb-8">
-            {images.map((img, idx) => (
-              <div
-                key={idx}
-                className={`w-20 h-20 rounded shadow overflow-hidden ${
-                  selectedImage === img ? "ring-2 ring-orange-500" : ""
-                }`}
-                onClick={() => setSelectedImage(img)}
-              >
-                <MediaDisplay media={img} />
-              </div>
-            ))}
-          </div>
-        )}
 
         {/* Botón de WhatsApp */}
         {provider?.whatsapp && (
